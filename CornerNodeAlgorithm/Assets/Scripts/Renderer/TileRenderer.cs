@@ -28,7 +28,8 @@ public class TileRenderer : MonoBehaviour
     {
         cGene = new CornerGenerator();
         cGene.setMap(mapData);
-        cGene.geneStart();
+        cGene.setSize(35, 35);
+        cGene.start();
     }
 
     void renderMap()
@@ -48,5 +49,6 @@ public class TileRenderer : MonoBehaviour
         float tileHei = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
         GameObject tile = Instantiate(tileType[type]);
         tile.transform.position = new Vector3(ptrX * tileWid, ptrY * tileHei, 1);
+        tile.transform.name = "X = " + ptrX + " /Y = " + ptrY;
     }
 }
