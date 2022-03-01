@@ -4,41 +4,45 @@ using UnityEngine;
 
 public class MapData2D : AbstractMapData2D
 {
-    private Node[,] mapData;
+    private Cell[,] mapData;
     public MapData2D()
     {
-        Debug.Log("¸Ê »ý¼º ¿Ï·á");
-        mapData = new Node[Constants.WIDTH, Constants.HEIGHT];
+        mapData = new Cell[Constants.WIDTH, Constants.HEIGHT];
         for(int x = 0; x<Constants.WIDTH; x++)
         {
             for(int y = 0; y < Constants.HEIGHT; y++)
             {
-                mapData[x, y] = new Node();
+                mapData[x, y] = new Cell();
             }
         }
 
     }
-    public override Node[,] getMap()
+    public override Cell[,] getMap()
     {
         return mapData;
     }
 
     private void mapGene()
     {
-        squGene(0, 0, Constants.WIDTH - 1, Constants.HEIGHT - 1, 2); //ÀüºÎ ´ÝÈù °ø°£
-        //º¹µµ
-        squGene(1, 7, 28, 3, 1);
-        squGene(2, 8, 26, 1, 0);
-        //¹æ1
-        squGene(19, 1, 5, 5, 1);
-        squGene(20, 6, 3, 1, 1);
-        squGene(20, 2, 3, 3, 0);
-        squGene(21, 5, 1, 3, 0);
-        //¹æ2
-        squGene(3, 11, 5, 5, 1);
-        squGene(4, 10, 3, 1, 1);
-        squGene(4, 12, 3, 3, 0);
-        squGene(5, 9, 1, 3, 0);
+        squGene(0, 0, Constants.WIDTH - 1, Constants.HEIGHT - 1, 2); //
+        
+        //Hallway
+        squGene(4, 50, 60,10,1);
+        squGene(5,51,58,8,0);
+        
+        //Room 1
+        squGene(19,50,5,1,0); //Door
+        squGene(18, 45, 7, 5, 1);
+        squGene(19, 45,5,5,0);
+        squGene(15,35,13,10,1); //room wall side
+        squGene(16,36,11,8,0);//room open side
+        squGene(19,44,5,1,0);//room open side
+        
+        //Room 2
+        squGene(45, 64, 13, 10, 1);
+        squGene(46,65,11,8,0);
+        squGene(48, 60, 7, 5, 1);
+        squGene(49,59,5,6,0);//door
     }
 
     private void squGene(int startX, int startY, int wid, int hei, int type)
