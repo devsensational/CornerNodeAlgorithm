@@ -1,8 +1,10 @@
+//Virtual map data
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapData2D : AbstractMapData2D
+public class MapData2D
 {
     private Cell[,] mapData;
     public MapData2D()
@@ -17,7 +19,7 @@ public class MapData2D : AbstractMapData2D
         }
 
     }
-    public override Cell[,] getMap()
+    public Cell[,] getMap()
     {
         return mapData;
     }

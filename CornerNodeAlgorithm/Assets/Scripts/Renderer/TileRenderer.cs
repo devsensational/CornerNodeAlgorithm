@@ -28,8 +28,7 @@ public class TileRenderer : MonoBehaviour
     {
         cGene = new CornerGenerator();
         cGene.setMap(mapData);
-        cGene.setSize(35, 35);
-        cGene.start();
+        cGene.geneStart();
     }
 
     void renderMap()
