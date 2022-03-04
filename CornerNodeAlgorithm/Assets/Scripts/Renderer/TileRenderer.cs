@@ -13,7 +13,7 @@ public class TileRenderer : MonoBehaviour
     void Start()
     {
         mapInit();
-        nodeGene();
+        nodeGene(); //Node Create start
         renderMap();
     }
     
