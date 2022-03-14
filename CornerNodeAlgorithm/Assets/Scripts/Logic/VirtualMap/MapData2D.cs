@@ -75,10 +75,13 @@ public class MapData2D
         squGene(23, 65, 7, 7, Constants.WALL);
         squGene(24, 65, 5, 6, Constants.OPEN);
         
+        // Hallway 3
+        squGene(48, 73, 5, 10, Constants.WALL);
+        squGene(49, 73, 3, 9, Constants.OPEN);
         
-        
-        
-        
+
+
+
     }
 
     private void squGene(int startX, int startY, int wid, int hei, int type)
