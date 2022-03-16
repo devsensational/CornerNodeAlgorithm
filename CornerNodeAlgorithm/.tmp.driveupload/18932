@@ -1,0 +1,45 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine.TestTools;
+using UnityEngine;
+using Vector2 = System.Numerics.Vector2;
+
+public class CheckWall
+{
+    private const int OPEN = 0;
+    private const int WALL = 1;
+    private const int CLOSE = 2;
+    private const int NODE = 3;
+    private const int CHECK = 4;
+    
+    private Cell[,] map;
+
+    public void setMapData(Cell[,] map) //set map from CNA
+    {
+        this.map = map;
+    }
+
+    public bool checkWall(PathNode startNode, PathNode targetNode)
+    {
+        Vector2 startV = new Vector2(startNode.getX(), startNode.getY());
+        Vector2 targetV = new Vector2(targetNode.getX(), targetNode.getY());
+        Vector2 checkDir = targetV - startV;
+
+        Vector2 dirNorm = Vector2.Normalize(checkDir);
+        for (int i = 1; Vector2.Multiply(dirNorm, i).Length() <= checkDir.Length(); i++)
+        {
+            int ptrX = startNode.getX() + (int) Vector2.Multiply(dirNorm, i).X;
+            int ptrY = startNode.getY() + (int) Vector2.Multiply(dirNorm, i).Y;
+
+            if (map[ptrX, ptrY].Type == CLOSE || map[ptrX, ptrY].Type == WALL)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
