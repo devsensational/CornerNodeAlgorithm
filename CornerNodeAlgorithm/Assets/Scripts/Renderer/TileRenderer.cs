@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class TileRenderer : MonoBehaviour
 {
@@ -17,6 +19,12 @@ public class TileRenderer : MonoBehaviour
         mapInit();
         nodeGene(); //Node Create start
         renderMap();
+        renderConnect();
+    }
+
+    private void Update()
+    {
+        layDebug();
     }
 
     void renderConnect()
@@ -57,7 +65,20 @@ public class TileRenderer : MonoBehaviour
         GameObject tile = Instantiate(tileType[type]);
         tile.name = "X : " + ptrX + " / Y : " + ptrY;
 
-        tile.transform.position = new Vector3(ptrX * tileWid, ptrY * tileHei, 1);
+        tile.transform.position = new Vector3(ptrX * tileWid, ptrY * tileHei, 0);
         tile.transform.name = "X = " + ptrX + " /Y = " + ptrY;
+    }
+
+    void layDebug()
+    {
+        float tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        float tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+        for (int i = 0; i < pNodeList.Count; i++)
+        {
+            for (int j = 0; j < pNodeList[i].getCnn().Count; j++)
+            {
+                Debug.DrawLine(new Vector3(pNodeList[i].getX() * tileWid,pNodeList[i].getY() * tileHei,0), new Vector3(pNodeList[i].getCnn()[j].Item1.getX() * tileWid,pNodeList[i].getCnn()[j].Item1.getY() * tileHei,0), Color.red);
+            }
+        }
     }
 }

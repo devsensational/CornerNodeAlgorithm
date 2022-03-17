@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,12 +8,14 @@ public class PathNode //
 {
     private int x;
     private int y;
-    private List<PathNode> cnnList = new List<PathNode>();
+    private Vector3 pos;
+    private List<Tuple<PathNode, Vector3>> cnnList = new List<Tuple<PathNode, Vector3>>();
 
     public PathNode(int x, int y)
     {
         this.x = x;
         this.y = y;
+        pos = new Vector3(x, y);
     }
 
     public int getX()
@@ -23,14 +26,18 @@ public class PathNode //
     {
         return y;
     }
-    
-    public List<PathNode> getCnn()
+
+    public Vector3 getPos()
+    {
+        return pos;
+    }
+    public List<Tuple<PathNode, Vector3>> getCnn()
     {
         return cnnList;
     }
 
-    public void setCnn(PathNode node)
+    public void setCnn(PathNode node, Vector3 v)
     {
-        cnnList.Add(node);
+        cnnList.Add(Tuple.Create(node,v));
     }
 }
