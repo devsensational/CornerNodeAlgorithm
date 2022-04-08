@@ -8,18 +8,34 @@ using UnityEngine.WSA;
 public class TileRenderer : MonoBehaviour
 {
     public GameObject[] tileType;
-
+    public GameObject startObj;
+    public GameObject targetObj;
+    
     MapData2D mapGene;
     CornerGenerator cGene;
     private List<PathNode> pNodeList;
     Cell[,] mapData;
+    private AStarAlgorithm aStarAlgorithm = new AStarAlgorithm();
 
+    private PathNode startNode;
+    private PathNode targetNode;
+
+    private float tileWid;
+    private float tileHei;
     void Start()
     {
         mapInit();
         nodeGene(); //Node Create start
         renderMap();
         renderConnect();
+        aStarConfig();
+        aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+    }
+
+    private void aStarConfig()
+    {
+        startNode = new PathNode((int)(startObj.transform.position.x / tileWid), (int) (startObj.transform.position.y / tileHei));
+        targetNode = new PathNode((int) (targetObj.transform.position.x/ tileWid), (int) (targetObj.transform.position.y / tileHei));
     }
 
     private void Update()
@@ -60,8 +76,8 @@ public class TileRenderer : MonoBehaviour
 
     void geneTile(int type, int ptrX, int ptrY)
     {
-        float tileWid = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
-        float tileHei = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+        tileWid = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        tileHei = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
         GameObject tile = Instantiate(tileType[type]);
         tile.name = "X : " + ptrX + " / Y : " + ptrY;
 
@@ -71,8 +87,8 @@ public class TileRenderer : MonoBehaviour
 
     void layDebug()
     {
-        float tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
-        float tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+        tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
         for (int i = 0; i < pNodeList.Count; i++)
         {
             for (int j = 0; j < pNodeList[i].getCnn().Count; j++)

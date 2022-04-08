@@ -17,10 +17,31 @@ public class CheckWall
     
     private Cell[,] map;
 
-    public void setMapData(Cell[,] map) //set map from CNA
+    public CheckWall(Cell[,] map) //set map from CNA
     {
         this.map = map;
     }
 
+    public void chkWall(PathNode startNode, PathNode targetNode)
+    {
+        Vector3 startV = new Vector3(startNode.getX(), startNode.getY());
+        Vector3 targetV = new Vector3(targetNode.getX(), targetNode.getY());
+        Vector3 checkDir = targetV - startV;
+        Vector3 dirNorm = checkDir.normalized;
+        for (int i = 1; dirNorm.magnitude * i <= checkDir.magnitude; i++)
+        {
+            int ptrX = startNode.getX() + (int) (dirNorm * i).x;
+            int ptrY = startNode.getY() + (int) (dirNorm * i).y;
+            int nodeCnt = 0;
+            if (map[ptrX, ptrY].Type == CLOSE || map[ptrX, ptrY].Type == WALL || map[ptrX, ptrY].Type == CHECK)
+            {
+                return;
+            }
+            if (map[ptrX, ptrY].Type == NODE) nodeCnt++;
+            if (nodeCnt > 2) return;
+        }
+        startNode.setCnn(targetNode, checkDir);
+        targetNode.setCnn(startNode, checkDir);
+    }
     
 }
