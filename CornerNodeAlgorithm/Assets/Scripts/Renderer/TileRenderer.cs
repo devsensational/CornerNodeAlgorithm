@@ -10,7 +10,7 @@ public class TileRenderer : MonoBehaviour
     public GameObject[] tileType;
     public GameObject startObj;
     public GameObject targetObj;
-    
+
     MapData2D mapGene;
     CornerGenerator cGene;
     private List<PathNode> pNodeList;
@@ -19,9 +19,11 @@ public class TileRenderer : MonoBehaviour
 
     private PathNode startNode;
     private PathNode targetNode;
+    private List<PathNode> pathList;
 
     private float tileWid;
     private float tileHei;
+
     void Start()
     {
         mapInit();
@@ -29,26 +31,42 @@ public class TileRenderer : MonoBehaviour
         renderMap();
         renderConnect();
         aStarConfig();
-        aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+        pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
     }
 
     private void aStarConfig()
     {
-        startNode = new PathNode((int)(startObj.transform.position.x / tileWid), (int) (startObj.transform.position.y / tileHei));
-        targetNode = new PathNode((int) (targetObj.transform.position.x/ tileWid), (int) (targetObj.transform.position.y / tileHei));
+        startNode = new PathNode((int) (startObj.transform.position.x / tileWid),
+            (int) (startObj.transform.position.y / tileHei));
+        targetNode = new PathNode((int) (targetObj.transform.position.x / tileWid),
+            (int) (targetObj.transform.position.y / tileHei));
     }
 
     private void Update()
     {
-        layDebug();
+        //layDebug();
+        pathLayDebug();
     }
 
     void renderConnect()
     {
         pNodeList = cGene.getPNodeList();
-        
     }
-    
+
+    void pathLayDebug()
+    {
+        tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+        Debug.Log("pl = " + pathList.Count);
+        for (int i = 0; i < pathList.Count - 1; i++)
+        {
+            //Debug.DrawLine(new Vector3(pathList[i].getX() * tileWid, pathList[i].getY() * tileHei, 0),
+            //    new Vector3(pathList[i + 1].getX() * tileWid,
+            //        pathList[i + 1].getY() * tileHei, 0), Color.red);
+            Debug.DrawLine(pathList[i].getPos() * tileWid, pathList[i + 1].getPos() * tileWid, Color.red);
+        }
+    }
+
     void mapInit()
     {
         mapGene = new MapData2D();
@@ -65,9 +83,9 @@ public class TileRenderer : MonoBehaviour
 
     void renderMap()
     {
-        for(int ptrY = 0; ptrY < Constants.HEIGHT - 1; ptrY++)
+        for (int ptrY = 0; ptrY < Constants.HEIGHT - 1; ptrY++)
         {
-            for(int ptrX = 0; ptrX < Constants.WIDTH - 1; ptrX++)
+            for (int ptrX = 0; ptrX < Constants.WIDTH - 1; ptrX++)
             {
                 geneTile(mapData[ptrX, ptrY].Type, ptrX, ptrY);
             }
@@ -93,7 +111,9 @@ public class TileRenderer : MonoBehaviour
         {
             for (int j = 0; j < pNodeList[i].getCnn().Count; j++)
             {
-                Debug.DrawLine(new Vector3(pNodeList[i].getX() * tileWid,pNodeList[i].getY() * tileHei,0), new Vector3(pNodeList[i].getCnn()[j].Item1.getX() * tileWid,pNodeList[i].getCnn()[j].Item1.getY() * tileHei,0), Color.red);
+                Debug.DrawLine(new Vector3(pNodeList[i].getX() * tileWid, pNodeList[i].getY() * tileHei, 0),
+                    new Vector3(pNodeList[i].getCnn()[j].Item1.getX() * tileWid,
+                        pNodeList[i].getCnn()[j].Item1.getY() * tileHei, 0), Color.red);
             }
         }
     }

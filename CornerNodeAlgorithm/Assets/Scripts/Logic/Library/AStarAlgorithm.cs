@@ -1,65 +1,128 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
+using System.Linq;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class AStarAlgorithm
 {
     private List<AStarNode> openList = new List<AStarNode>();
     private List<AStarNode> closeList = new List<AStarNode>();
+    private List<PathNode> pathList = new List<PathNode>();
     private PathNode startNode;
     private PathNode targetNode;
     private List<PathNode> pNodeList;
     private Cell[,] map;
-    public void startPathfinding(PathNode _startNode, PathNode _targetNode, List<PathNode> _pNodeList, Cell[,] _map)
+    private CheckWall checkWall;
+    
+    public List<PathNode> startPathfinding(PathNode _startNode, PathNode _targetNode, List<PathNode> _pNodeList, Cell[,] _map)
     {
-        //allocate
+        //Allocate
         startNode = _startNode;
         targetNode = _targetNode;
         pNodeList = _pNodeList;
         map = _map;
+        checkWall = new CheckWall(map);
+        //openList.RemoveAll();
+        //closeList.RemoveAll();
         
-        Debug.Log("startNode pos = " + startNode.getPos());
-        CheckWall checkWall = new CheckWall(map);
+        cnnNode(startNode);
+        cnnNode(targetNode);
+
+        AStarNode firstCLoseNode = new AStarNode(startNode, 0, 0, null);
+        closeList.Add(firstCLoseNode);
+        aStarAlgorithm(firstCLoseNode);
+        
+        return pathList;
+    }
+
+    private void cnnNode(PathNode ptr)
+    {
+        pNodeList.Add(ptr);
         for (int i = 0; i < pNodeList.Count - 1; i++)
         {
-            checkWall.chkWall(startNode, pNodeList[i]);
+            checkWall.chkWall(ptr, pNodeList[i]);
+            
         }
-        pNodeList.Add(targetNode);
-        for (int i = 0; i < pNodeList.Count - 1; i++)
+        for (int i = 0; i < ptr.getCnn().Count; i++)
         {
-            checkWall.chkWall(targetNode, pNodeList[i]);
+            ptr.getCnn()[i].Item1.setCnn(ptr, ptr.getCnn()[i].Item2);
         }
-
-        AStarNode ptr = new AStarNode(startNode, 0, 0, null);
-        closeList.Add(ptr);
-        //aStarAlgorithm(ptr);
-        Tuple<PathNode, Vector3> nodePtr = ptr.GetNode.getCnn()[0];
-        AStarNode temp = new AStarNode(nodePtr.Item1, Vector3.Magnitude(new Vector3(targetNode.getX(), targetNode.getY()) - new Vector3(nodePtr.Item1.getX(), nodePtr.Item1.getY())), Vector3.Magnitude(nodePtr.Item2), null);
-        Debug.Log(temp);
-
     }
 
     private void aStarAlgorithm(AStarNode ptr)
     {
-        while (ptr.GetNode != targetNode)
+        int wCnt = 0;
+        do
         {
-            for (int i = 0; i <= ptr.GetNode.getCnn().Count; i++)
+            ptr = addCloseList(addOpenList(ptr));
+            if (ptr == null)
             {
-                if (ptr.ParentNode == null || ptr.ParentNode.GetNode != ptr.GetNode.getCnn()[i].Item1)
+                Debug.Log("failed");
+                break;
+            } //failed
+
+            if (ptr.GetNode == targetNode)
+            {
+                while (ptr.GetNode != startNode)
                 {
-                    Tuple<PathNode, Vector3> nodePtr = ptr.GetNode.getCnn()[i];
-                    AStarNode temp = new AStarNode(nodePtr.Item1, Vector3.Magnitude(new Vector3(targetNode.getX(), targetNode.getY()) - new Vector3(nodePtr.Item1.getX(), nodePtr.Item1.getY())), Vector3.Magnitude(nodePtr.Item2), null);
-                    //if(openList.Contains(ptr.GetNode.getCnn()[i].Item1))
-                    
+                    pathList.Add(ptr.GetNode);
+                    ptr = ptr.ParentNode;
                 }
-            }
-        }
+                pathList.Add(startNode); 
+                Debug.Log("done");
+                break;
+            } //done
+        } while (openList.Count != 0 && (wCnt++) <= 1000);
+        if(openList.Count == 0) Debug.Log("OpenList is empty");
+        
     }
 
-    private void setCloseList(AStarNode ptr)
+    private AStarNode addOpenList(AStarNode ptr)
     {
-        //
+        for (int i = 0; i < ptr.GetNode.getCnn().Count; i++)
+        {
+            Tuple<PathNode, Vector3> nodePtr = ptr.GetNode.getCnn()[i];
+            AStarNode tmpPtr = createNewAStarNode(nodePtr, ptr);
+            if (ptr.ParentNode == null || tmpPtr.GetNode != ptr.ParentNode.GetNode)
+            {
+                if (closeList.Find(x => x.GetNode == tmpPtr.GetNode) != null)
+                    continue;
+                AStarNode comp = openList.Find(x => x.GetNode == tmpPtr.GetNode);
+                if (comp != null && comp.FScore < tmpPtr.FScore)
+                {
+                    openList.Remove(comp);
+                }
+                openList.Add(tmpPtr);
+            }
+        }
+
+        AStarNode minPtr = null;
+        for (int i = 0; i < openList.Count; i++)
+        {
+            if (minPtr == null || minPtr.FScore > openList[i].FScore)
+                minPtr = openList[i];
+        }
+
+        return minPtr;
+    }
+
+    private AStarNode createNewAStarNode(Tuple<PathNode, Vector3> nodePtr, AStarNode parentNode)
+    {
+        return new AStarNode(nodePtr.Item1,
+            Vector3.Magnitude(new Vector3(targetNode.getX(), targetNode.getY()) -
+                              new Vector3(nodePtr.Item1.getX(), nodePtr.Item1.getY())),
+            Vector3.Magnitude(nodePtr.Item2),
+            parentNode);
+    }
+    private AStarNode addCloseList(AStarNode ptr)
+    {
+        if (ptr == null) return null;
+        closeList.Add(ptr);
+        openList.Remove(ptr);
+        return ptr;
     }
 }
