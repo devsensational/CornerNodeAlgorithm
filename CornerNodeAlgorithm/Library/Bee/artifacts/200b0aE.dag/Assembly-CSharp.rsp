@@ -339,6 +339,7 @@
 "Assets/Scripts/Logic/Library/PathNode.cs"
 "Assets/Scripts/Logic/VirtualMap/Constants.cs"
 "Assets/Scripts/Logic/VirtualMap/MapData2D.cs"
+"Assets/Scripts/openCV/openCV.cs"
 "Assets/Scripts/Renderer/TileRenderer.cs"
 -langversion:9.0
 

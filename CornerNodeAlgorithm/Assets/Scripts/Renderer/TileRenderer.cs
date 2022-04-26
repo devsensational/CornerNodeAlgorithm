@@ -24,7 +24,7 @@ public class TileRenderer : MonoBehaviour
     private float tileWid;
     private float tileHei;
 
-    void Start()
+    void Start() //오브젝트가 생기는 즉시 실행하는 구분(like 생성자)
     {
         mapInit();
         nodeGene(); //Node Create start
@@ -42,7 +42,7 @@ public class TileRenderer : MonoBehaviour
             (int) (targetObj.transform.position.y / tileHei));
     }
 
-    private void Update()
+    private void Update() //초당 60번 실행되는 구문
     {
         //layDebug();
         pathLayDebug();

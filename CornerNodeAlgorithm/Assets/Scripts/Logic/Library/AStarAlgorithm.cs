@@ -26,8 +26,9 @@ public class AStarAlgorithm
         pNodeList = _pNodeList;
         map = _map;
         checkWall = new CheckWall(map);
-        //openList.RemoveAll();
-        //closeList.RemoveAll();
+        openList.Clear();
+        closeList.Clear();
+        pathList.Clear();
         
         cnnNode(startNode);
         cnnNode(targetNode);
