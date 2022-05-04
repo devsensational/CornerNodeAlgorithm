@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Cell
 {
-    int type = 2; 
-    int stat = 0; 
+    private int type = 2; 
+    private int stat = 0;
+
+    public Cell(int type)
+    {
+        this.type = type;
+    }
 
     public int Type
     {

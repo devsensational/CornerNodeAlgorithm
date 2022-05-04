@@ -21,29 +21,31 @@ public class TileRenderer : MonoBehaviour
     private PathNode startNode;
     private PathNode targetNode;
     private List<PathNode> pathList;
-    
+
+    private int width, height;
     private float tileWid;
     private float tileHei;
 
     void Start() //오브젝트가 생기는 즉시 실행하는 구분(like 생성자)
     {
-        mapInit();
+        //mapInit();
         //nodeGene(); //Node Create start
+        jsonMapInitialize();
         cornerNodeV2Start();
         renderMap();
-        renderConnectV2();
-        aStarConfig();
-        pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+        //renderConnectV2();
+        //aStarConfig();
+        //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
     }
 
-    private void cornerNodeV2Start()
+    private void cornerNodeV2Start() // Start CNA V2
     {
         CNA = new CornerNodeAlgorithmV2();
         CNA.setMap(mapData);
-        CNA.start(16, 35);
+        CNA.start(5, 2);
     }
     
-    private void aStarConfig()
+    private void aStarConfig() // A* Algorithm config
     {
         startNode = new PathNode((int) (startObj.transform.position.x / tileWid),
             (int) (startObj.transform.position.y / tileHei));
@@ -51,10 +53,10 @@ public class TileRenderer : MonoBehaviour
             (int) (targetObj.transform.position.y / tileHei));
     }
 
-    private void Update() 
+    private void Update() // Unity Update
     {
         //layDebug();
-        pathLayDebug();
+        //pathLayDebug();
     }
 
     void renderConnect()
@@ -67,7 +69,7 @@ public class TileRenderer : MonoBehaviour
         pNodeList = CNA.getPNodeList();
     }
 
-    void pathLayDebug()
+    void pathLayDebug() //Show Path
     {
         tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
         tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
@@ -77,11 +79,20 @@ public class TileRenderer : MonoBehaviour
         }
     }
 
-    void mapInit()
+    void mapInit() // 
     {
         mapGene = new MapData2D();
         mapGene.virtualMapGenerate();
         mapData = mapGene.getMap();
+    }
+
+    void jsonMapInitialize()
+    {
+        JsonMapLoader jsonMapLoader = new JsonMapLoader();
+        jsonMapLoader.start();
+        mapData = jsonMapLoader.MapData;
+        width = jsonMapLoader.Width;
+        height = jsonMapLoader.Height;
     }
 
     void nodeGene()
@@ -93,9 +104,9 @@ public class TileRenderer : MonoBehaviour
 
     void renderMap()
     {
-        for (int ptrY = 0; ptrY < Constants.HEIGHT - 1; ptrY++)
+        for (int ptrY = 0; ptrY < height; ptrY++)
         {
-            for (int ptrX = 0; ptrX < Constants.WIDTH - 1; ptrX++)
+            for (int ptrX = 0; ptrX < width; ptrX++)
             {
                 geneTile(mapData[ptrX, ptrY].Type, ptrX, ptrY);
             }

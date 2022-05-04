@@ -9,6 +9,7 @@ public class MapData2D
     private Cell[,] mapData;
     public MapData2D()
     {
+        /*
         mapData = new Cell[Constants.WIDTH, Constants.HEIGHT];
         for(int x = 0; x<Constants.WIDTH; x++)
         {
@@ -17,7 +18,7 @@ public class MapData2D
                 mapData[x, y] = new Cell();
             }
         }
-
+        */
     }
     public Cell[,] getMap()
     {
@@ -26,7 +27,7 @@ public class MapData2D
 
     private void mapGene()
     {
-        squGene(0, 0, Constants.WIDTH - 1, Constants.HEIGHT - 1, Constants.CLOSE); //
+        //squGene(0, 0, Constants.WIDTH - 1, Constants.HEIGHT - 1, Constants.CLOSE); //
         
         //Hallway 1
         squGene(4, 50, 60,10,Constants.WALL);

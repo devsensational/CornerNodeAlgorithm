@@ -1,42 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 public class JsonMapLoader
 {
-    /*
-    private JsonObject jo = new JsonObject();
+    private Cell[,] mapData;
+    private int width, height;
 
-    void jsonConfig()
-    {
-        var jtest = new JsonObject{width = 10, md = new List<byte>{1,1,1}};
-        var json3 = JObject.FromObject(jtest);
-        
-        Debug.Log(json3.ToString());
-    }
 
-    void readJson()
+
+    private void loadJson()
     {
-        string path = Application.dataPath + "/test.json";
+        string path = Application.dataPath + "/map.json";
 
         using (StreamReader file = File.OpenText(path))
         using (JsonTextReader reader = new JsonTextReader(file))
         {
             JObject json = (JObject) JToken.ReadFrom(reader);
-            jo.width = (int) json["width"];
-            jo.height = (int) json["height"];
-
+            width = (int) json["width"];
+            height = (int) json["height"];
+            
+            Debug.Log("J Width : " + width);
+            Debug.Log("J Height : " + height);
+            mapData = new Cell[width,height];
             var mData = json.SelectToken("mapDataArr");
-            for (int i = 0; i < mData.Count(); i++)
+            int cnt = 0;
+            for (int i = 0; i < width; i++)
             {
-                jo.md.Add(byte.Parse(mData[i].ToString()));
+                for (int j = 0; j < height; j++)
+                {
+                    mapData[i, j] = new Cell((int) mData[cnt]);
+                    cnt++;
+                }
             }
         }
-        
-        Debug.Log(jo.height);
-        Debug.Log(jo.width);
-        for(int i = 0; i<jo.md.Count(); i++)
-            Debug.Log(jo.md[i]);
     }
-    */
+
+    public void start() // Start this method at other object
+    {
+        loadJson();
+    }
+    
+    public Cell[,] MapData // MapData Getter
+    {
+        get => mapData;
+    }
+    
+    public int Width
+    {
+        get => width;
+    }
+
+    public int Height
+    {
+        get => height;
+    }
 }
