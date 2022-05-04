@@ -13,6 +13,7 @@ public class TileRenderer : MonoBehaviour
 
     MapData2D mapGene;
     CornerGenerator cGene;
+    private CornerNodeAlgorithmV2 CNA;
     private List<PathNode> pNodeList;
     Cell[,] mapData;
     private AStarAlgorithm aStarAlgorithm = new AStarAlgorithm();
@@ -20,20 +21,28 @@ public class TileRenderer : MonoBehaviour
     private PathNode startNode;
     private PathNode targetNode;
     private List<PathNode> pathList;
-
+    
     private float tileWid;
     private float tileHei;
 
     void Start() //오브젝트가 생기는 즉시 실행하는 구분(like 생성자)
     {
         mapInit();
-        nodeGene(); //Node Create start
+        //nodeGene(); //Node Create start
+        cornerNodeV2Start();
         renderMap();
-        renderConnect();
+        renderConnectV2();
         aStarConfig();
         pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
     }
 
+    private void cornerNodeV2Start()
+    {
+        CNA = new CornerNodeAlgorithmV2();
+        CNA.setMap(mapData);
+        CNA.start(16, 35);
+    }
+    
     private void aStarConfig()
     {
         startNode = new PathNode((int) (startObj.transform.position.x / tileWid),
@@ -42,7 +51,7 @@ public class TileRenderer : MonoBehaviour
             (int) (targetObj.transform.position.y / tileHei));
     }
 
-    private void Update() //초당 60번 실행되는 구문
+    private void Update() 
     {
         //layDebug();
         pathLayDebug();
@@ -53,17 +62,18 @@ public class TileRenderer : MonoBehaviour
         pNodeList = cGene.getPNodeList();
     }
 
+    void renderConnectV2()
+    {
+        pNodeList = CNA.getPNodeList();
+    }
+
     void pathLayDebug()
     {
         tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
         tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
-        Debug.Log("pl = " + pathList.Count);
         for (int i = 0; i < pathList.Count - 1; i++)
         {
-            //Debug.DrawLine(new Vector3(pathList[i].getX() * tileWid, pathList[i].getY() * tileHei, 0),
-            //    new Vector3(pathList[i + 1].getX() * tileWid,
-            //        pathList[i + 1].getY() * tileHei, 0), Color.red);
-            Debug.DrawLine(pathList[i].getPos() * tileWid, pathList[i + 1].getPos() * tileWid, Color.red);
+            Debug.DrawLine(pathList[i].getPos() * tileWid, pathList[i + 1].getPos() * tileWid, Color.green);
         }
     }
 
