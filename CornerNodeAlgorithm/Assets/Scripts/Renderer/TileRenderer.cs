@@ -21,28 +21,37 @@ public class TileRenderer : MonoBehaviour
     private PathNode startNode;
     private PathNode targetNode;
     private List<PathNode> pathList;
+    private List<(int, int)> wallList;
 
     private int width, height;
-    private float tileWid;
-    private float tileHei;
-
-    void Start() //오브젝트가 생기는 즉시 실행하는 구분(like 생성자)
+    [Range(0,2)]
+    public float tileWid;
+    [Range(0,2)]
+    public float tileHei;
+    
+    void Start() // Unity Start
     {
-        //mapInit();
-        //nodeGene(); //Node Create start
+        //mapInit(); // Old map initialize
+        //nodeGene(); // Old Node generator
         jsonMapInitialize();
-        cornerNodeV2Start();
-        renderMap();
-        //renderConnectV2();
-        //aStarConfig();
-        //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+        cornerNodeV2Start(); //Node Create start
+        //renderMap();
+        renderConnectV2();
+        aStarConfig();
+        pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+    }
+    
+    private void Update() // Unity Update
+    {
+        layDebug();
+        pathLayDebug();
     }
 
     private void cornerNodeV2Start() // Start CNA V2
     {
         CNA = new CornerNodeAlgorithmV2();
         CNA.setMap(mapData);
-        CNA.start(5, 2);
+        CNA.start(wallList);
     }
     
     private void aStarConfig() // A* Algorithm config
@@ -53,17 +62,6 @@ public class TileRenderer : MonoBehaviour
             (int) (targetObj.transform.position.y / tileHei));
     }
 
-    private void Update() // Unity Update
-    {
-        //layDebug();
-        //pathLayDebug();
-    }
-
-    void renderConnect()
-    {
-        pNodeList = cGene.getPNodeList();
-    }
-
     void renderConnectV2()
     {
         pNodeList = CNA.getPNodeList();
@@ -71,19 +69,12 @@ public class TileRenderer : MonoBehaviour
 
     void pathLayDebug() //Show Path
     {
-        tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
-        tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+        //tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        //tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
         for (int i = 0; i < pathList.Count - 1; i++)
         {
             Debug.DrawLine(pathList[i].getPos() * tileWid, pathList[i + 1].getPos() * tileWid, Color.green);
         }
-    }
-
-    void mapInit() // 
-    {
-        mapGene = new MapData2D();
-        mapGene.virtualMapGenerate();
-        mapData = mapGene.getMap();
     }
 
     void jsonMapInitialize()
@@ -91,10 +82,41 @@ public class TileRenderer : MonoBehaviour
         JsonMapLoader jsonMapLoader = new JsonMapLoader();
         jsonMapLoader.start();
         mapData = jsonMapLoader.MapData;
+        wallList = jsonMapLoader.WallList;
         width = jsonMapLoader.Width;
         height = jsonMapLoader.Height;
     }
 
+
+    void geneTile(int type, int ptrX, int ptrY)
+    {
+        
+        //tileWid = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        //tileHei = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+        
+        GameObject tile = Instantiate(tileType[type]);
+        tile.name = "X : " + ptrX + " / Y : " + ptrY;
+
+        tile.transform.position = new Vector3(ptrX * tileWid, ptrY * tileHei, 0);
+        tile.transform.name = "X = " + ptrX + " /Y = " + ptrY;
+    }
+
+    void layDebug()
+    {
+        //tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
+        //tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
+        for (int i = 0; i < pNodeList.Count; i++)
+        {
+            for (int j = 0; j < pNodeList[i].getCnn().Count; j++)
+            {
+                Debug.DrawLine(new Vector3(pNodeList[i].getX() * tileWid, pNodeList[i].getY() * tileHei, 0),
+                    new Vector3(pNodeList[i].getCnn()[j].Item1.getX() * tileWid,
+                        pNodeList[i].getCnn()[j].Item1.getY() * tileHei, 0), Color.red);
+            }
+        }
+    }
+    
+    
     void nodeGene()
     {
         cGene = new CornerGenerator();
@@ -112,30 +134,16 @@ public class TileRenderer : MonoBehaviour
             }
         }
     }
-
-    void geneTile(int type, int ptrX, int ptrY)
+    
+    void mapInit() // 
     {
-        tileWid = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
-        tileHei = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
-        GameObject tile = Instantiate(tileType[type]);
-        tile.name = "X : " + ptrX + " / Y : " + ptrY;
-
-        tile.transform.position = new Vector3(ptrX * tileWid, ptrY * tileHei, 0);
-        tile.transform.name = "X = " + ptrX + " /Y = " + ptrY;
+        mapGene = new MapData2D();
+        mapGene.virtualMapGenerate();
+        mapData = mapGene.getMap();
     }
 
-    void layDebug()
+    void renderConnect()
     {
-        tileWid = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
-        tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
-        for (int i = 0; i < pNodeList.Count; i++)
-        {
-            for (int j = 0; j < pNodeList[i].getCnn().Count; j++)
-            {
-                Debug.DrawLine(new Vector3(pNodeList[i].getX() * tileWid, pNodeList[i].getY() * tileHei, 0),
-                    new Vector3(pNodeList[i].getCnn()[j].Item1.getX() * tileWid,
-                        pNodeList[i].getCnn()[j].Item1.getY() * tileHei, 0), Color.red);
-            }
-        }
+        pNodeList = cGene.getPNodeList();
     }
 }

@@ -10,13 +10,13 @@ public class CornerNodeAlgorithmV2
 
     private Cell[,] mapData;
     private List<PathNode> pNodeList = new List<PathNode>();
+    private List<(int, int)> wallList;
 
     private void createCorner(int x, int y, int beforeDirection)
     {
-        Debug.Log("Ptr X = " + x + " / ptr Y = " + y);
-        if (x < 0 || y < 0 || x >= width || y >= height) {Debug.Log("Out of range"); return;}
-        if (mapData[x, y].Type == Constants.CHECK) {Debug.Log("Checked cell"); return;}
-        if (/*map[x, y].Type == Constants.CLOSE ||*/ mapData[x, y].Type == Constants.OPEN )
+        if (x < 0 || y < 0 || x >= width || y >= height) { /*Debug.Log("Out of range");*/ return;} // Out of range
+        if (mapData[x, y].Type == Constants.CHECK) { /*Debug.Log("Checked cell");*/ return;} // Checked cell
+        if (/*map[x, y].Type == Constants.CLOSE ||*/ mapData[x, y].Type == Constants.OPEN ) // is Corner?
         {
             int wallCount = 0;
             for (int i = 0; i < 8; i++)
@@ -26,8 +26,8 @@ public class CornerNodeAlgorithmV2
                 if (!(nextX < 0 || nextY < 0 || nextX >= width || nextY >= height))
                     if (mapData[nextX, nextY].Type == Constants.WALL || mapData[nextX, nextY].Type == Constants.CHECK)
                         wallCount++;
+                if (wallCount > 1) break;
             }
-            Debug.Log("X : " + x + " / Y : " + y + " / WallCount = " + wallCount);
             if (wallCount == 1)
             {
                 mapData[x, y].Type = Constants.NODE;
@@ -90,10 +90,15 @@ public class CornerNodeAlgorithmV2
         return pNodeList;
     }
 
-    public void start(int x, int y) //Start
+    public void start(List<(int, int)> wallList) //Start
     {
-        
-        createCorner(x, y, 0);
+        for (int i = 0; i < wallList.Count; i++)
+        {
+            int x = wallList[i].Item1;
+            int y = wallList[i].Item2;
+            if(mapData[x,y].Type == Constants.WALL) 
+                createCorner(x, y, 0);
+        }
         createConnect();
     }
     

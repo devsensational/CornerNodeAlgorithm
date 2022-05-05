@@ -41,7 +41,7 @@ public class CheckWall
             if (nodeCnt > 2) return;
         }
         startNode.setCnn(targetNode, checkDir);
-        //targetNode.setCnn(startNode, checkDir);
+        targetNode.setCnn(startNode, checkDir);
     }
     
 }
