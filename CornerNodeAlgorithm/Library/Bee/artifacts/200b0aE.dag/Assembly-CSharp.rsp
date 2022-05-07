@@ -333,6 +333,7 @@
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/Logic/AStarAlgorithm.cs"
+"Assets/Scripts/Logic/AstarForComparison/AStarAlgorithmForComparison.cs"
 "Assets/Scripts/Logic/AStarNode.cs"
 "Assets/Scripts/Logic/Cell.cs"
 "Assets/Scripts/Logic/CheckWall.cs"
