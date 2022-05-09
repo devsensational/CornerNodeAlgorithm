@@ -35,7 +35,7 @@ public class TileRenderer : MonoBehaviour
         //nodeGene(); // Old Node generator
         jsonMapInitialize();
         cornerNodeV2Start(); //Node Create start
-        //renderMap();
+        renderMap();
         renderConnectV2();
         aStarConfig();
         pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
