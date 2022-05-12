@@ -2,10 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEditorInternal;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class AStarAlgorithm
 {
@@ -20,6 +22,10 @@ public class AStarAlgorithm
     
     public List<PathNode> startPathfinding(PathNode _startNode, PathNode _targetNode, List<PathNode> _pNodeList, Cell[,] _map)
     {
+        //Stopwatch start
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+        
         //Allocate
         startNode = _startNode;
         targetNode = _targetNode;
@@ -37,6 +43,9 @@ public class AStarAlgorithm
         closeList.Add(firstCLoseNode);
         aStarAlgorithm(firstCLoseNode);
         
+        //Stopwatch stop
+        stopwatch.Stop();
+        Debug.Log("Pathfinding Done!! Time : " + stopwatch.Elapsed.ToString());
         return pathList;
     }
 
@@ -56,7 +65,6 @@ public class AStarAlgorithm
 
     private void aStarAlgorithm(AStarNode ptr)
     {
-        int wCnt = 0;
         do
         {
             ptr = addCloseList(addOpenList(ptr));
@@ -77,7 +85,7 @@ public class AStarAlgorithm
                 Debug.Log("done");
                 break;
             } //done
-        } while (openList.Count != 0 && (wCnt++) <= 1000);
+        } while (openList.Count != 0);
         if(openList.Count == 0) Debug.Log("OpenList is empty");
         
     }

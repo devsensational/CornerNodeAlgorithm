@@ -12,9 +12,9 @@ public class JsonMapLoader
     private List<(int, int)> wallList;
     private int width, height;
     
-    private void loadJson()
+    private void loadJson(string fileName)
     {
-        string path = Application.dataPath + "/map.json";
+        string path = Application.dataPath + "/" + fileName + ".json";
 
         using (StreamReader file = File.OpenText(path))
         using (JsonTextReader reader = new JsonTextReader(file))
@@ -41,9 +41,9 @@ public class JsonMapLoader
         }
     }
 
-    public void start() // Start this method at other object
+    public void start(string fileName) // Start this method at other object
     {
-        loadJson();
+        loadJson(fileName);
     }
     
     public Cell[,] MapData // MapData getter

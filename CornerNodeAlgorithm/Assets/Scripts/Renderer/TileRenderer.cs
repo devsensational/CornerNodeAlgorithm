@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http.Headers;
 using UnityEngine;
 using UnityEngine.WSA;
+using Debug = UnityEngine.Debug;
 
 public class TileRenderer : MonoBehaviour
 {
@@ -23,30 +25,48 @@ public class TileRenderer : MonoBehaviour
     private List<PathNode> pathList;
     private List<(int, int)> wallList;
 
+    private List<Vector3> pathListForComparison;
+    
     private int width, height;
     [Range(0,2)]
     public float tileWid;
     [Range(0,2)]
     public float tileHei;
-    
+    public string jsonFileName;
+
+    public bool onPathLayDebug;
+    public bool onPathLayForComparison;
+    public bool onNodeNetworkDebug;
+
+    private System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
     void Start() // Unity Start
     {
         //mapInit(); // Old map initialize
         //nodeGene(); // Old Node generator
         jsonMapInitialize();
         cornerNodeV2Start(); //Node Create start
-        renderMap();
         renderConnectV2();
         aStarConfig();
         pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+        comparisonStart();
+        
+        //renderMap(); //Render map tiles
     }
     
     private void Update() // Unity Update
     {
-        layDebug();
-        pathLayDebug();
+        if(onNodeNetworkDebug) layDebug();
+        if(onPathLayDebug) pathLayDebug();
+        if(onPathLayForComparison) pathLayDebugForComparison();
     }
 
+    private void comparisonStart()
+    {
+        AStarAlgorithmForComparison algorithmForComparison = new AStarAlgorithmForComparison();
+        pathListForComparison = algorithmForComparison.start((int)(startObj.transform.position.x / tileWid), (int)(startObj.transform.position.y/ tileHei),
+            (int)(targetObj.transform.position.x/ tileWid), (int)(targetObj.transform.position.y/ tileHei), mapData);
+
+    }
     private void cornerNodeV2Start() // Start CNA V2
     {
         CNA = new CornerNodeAlgorithmV2();
@@ -77,10 +97,18 @@ public class TileRenderer : MonoBehaviour
         }
     }
 
+    void pathLayDebugForComparison() //Show Path for comparison
+    {
+        for (int i = 0; i < pathListForComparison.Count - 1; i++)
+        {
+            Debug.DrawLine(pathListForComparison[i] * tileWid, pathListForComparison[i + 1] * tileWid, Color.yellow);
+        }
+    }
+
     void jsonMapInitialize()
     {
         JsonMapLoader jsonMapLoader = new JsonMapLoader();
-        jsonMapLoader.start();
+        jsonMapLoader.start(jsonFileName);
         mapData = jsonMapLoader.MapData;
         wallList = jsonMapLoader.WallList;
         width = jsonMapLoader.Width;

@@ -11,4 +11,5 @@ static class Constants
         public const int CLOSE = 2;
         public const int NODE = 3;
         public const int CHECK = 4;
+        public const int ASTARCHECK = 5;
     }
