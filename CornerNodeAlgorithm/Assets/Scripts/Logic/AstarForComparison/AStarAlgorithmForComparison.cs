@@ -87,7 +87,7 @@ public class AStarAlgorithmForComparison
             }
         }
         
-        for (int i = 0; i < 4; i++) // Normal
+        for (int i = 0; i < 4; i++) // Diagonal
         {
             int ptrX = ptr.X + diagonalDirection[i, 0];
             int ptrY = ptr.Y + diagonalDirection[i, 1];
