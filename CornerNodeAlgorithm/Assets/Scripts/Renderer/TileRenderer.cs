@@ -17,12 +17,14 @@ public class TileRenderer : MonoBehaviour
     CornerGenerator cGene;
     private CornerNodeAlgorithmV2 CNA;
     private List<PathNode> pNodeList;
-    Cell[,] mapData;
+    private Cell[,] mapData;
     private AStarAlgorithm aStarAlgorithm = new AStarAlgorithm();
-
+    private AStarAlgorithmV2 aStarAlgorithmV2 = new AStarAlgorithmV2();
+    
     private PathNode startNode;
     private PathNode targetNode;
     private List<PathNode> pathList;
+    private List<Vector3> pathListV2;
     private List<(int, int)> wallList;
 
     private List<Vector3> pathListForComparison;
@@ -47,19 +49,25 @@ public class TileRenderer : MonoBehaviour
         cornerNodeV2Start(); //Node Create start
         renderConnectV2();
         aStarConfig();
-        pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
-        comparisonStart();
         
+        aStarAlgorithmV2Start();
+        //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+        comparisonStart();
         //renderMap(); //Render map tiles
     }
     
     private void Update() // Unity Update
     {
         if(onNodeNetworkDebug) layDebug();
-        if(onPathLayDebug) pathLayDebug();
-        if(onPathLayForComparison) pathLayDebugForComparison();
+        //if(onPathLayDebug) pathLayDebug(); //Old Debug
+        if(onPathLayDebug) pathLayDebugForComparison(pathListV2, Color.green);
+        if(onPathLayForComparison) pathLayDebugForComparison(pathListForComparison, Color.yellow);
     }
 
+    private void aStarAlgorithmV2Start()
+    {
+        pathListV2 = aStarAlgorithmV2.start(startNode, targetNode, pNodeList, mapData);
+    }
     private void comparisonStart()
     {
         AStarAlgorithmForComparison algorithmForComparison = new AStarAlgorithmForComparison();
@@ -97,11 +105,11 @@ public class TileRenderer : MonoBehaviour
         }
     }
 
-    void pathLayDebugForComparison() //Show Path for comparison
+    void pathLayDebugForComparison(List<Vector3> pathList, Color color) //Show Path for comparison
     {
-        for (int i = 0; i < pathListForComparison.Count - 1; i++)
+        for (int i = 0; i < pathList.Count - 1; i++)
         {
-            Debug.DrawLine(pathListForComparison[i] * tileWid, pathListForComparison[i + 1] * tileWid, Color.yellow);
+            Debug.DrawLine(pathList[i] * tileWid, pathList[i + 1] * tileWid, color);
         }
     }
 
