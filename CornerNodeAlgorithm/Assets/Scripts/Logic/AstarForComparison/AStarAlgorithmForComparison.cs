@@ -42,7 +42,7 @@ public class AStarAlgorithmForComparison
         
         //Stopwatch stop
         stopwatch.Stop();
-        Debug.Log("Single A* Algorithm Done!! Time : " + stopwatch.Elapsed.ToString());
+        Debug.Log("Single A* Algorithm Done!! Time : " + stopwatch.ElapsedMilliseconds.ToString());
         
         return pathList;
     }
@@ -53,7 +53,7 @@ public class AStarAlgorithmForComparison
         {
             if (ptr.X == targetX && ptr.Y == targetY)
             {
-                Debug.Log("Find path");
+                Debug.Log("Single A* Complete");
                 while (true)
                 {
                     pathList.Add(new Vector3(ptr.X, ptr.Y, 0));

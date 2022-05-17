@@ -9,6 +9,10 @@ using UnityEditorInternal;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
+/*
+ * Old version class
+ */
+
 public class AStarAlgorithm
 {
     private List<AStarNode> openList = new List<AStarNode>();

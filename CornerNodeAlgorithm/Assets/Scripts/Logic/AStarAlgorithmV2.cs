@@ -36,9 +36,7 @@ public class AStarAlgorithmV2
         aStarAlgorithm(openList[0]);
         
         stopwatch.Stop();
-        Debug.Log("A* Algorithm Done! Time : " + stopwatch.Elapsed);
-        Debug.Log("count : " + pathResult.Count);
-        Debug.Log(pathResult.ToString());
+        Debug.Log("A* + CNA Done! Time : " + stopwatch.ElapsedMilliseconds);
         return pathResult;
     }
 
@@ -49,7 +47,7 @@ public class AStarAlgorithmV2
             if (ptr.GetNode.getX() == targetNode.getX() && ptr.GetNode.getY() == targetNode.getY())
             {
                 //done
-                Debug.Log("A* done");
+                Debug.Log("Pathfinding Complete (A* + CNA)");
                 while (true)
                 {
                     pathResult.Add(new Vector3(ptr.GetNode.getX(), ptr.GetNode.getY()));
@@ -71,12 +69,24 @@ public class AStarAlgorithmV2
         for (int i = 0; i < ptr.GetNode.getCnn().Count; i++)
         {
             Tuple<PathNode,Vector3> nodeBuffer = ptr.GetNode.getCnn()[i];
-            if (!nodeBuffer.Item1.IsCheck)
+            double hScore = Math.Sqrt(Math.Pow(targetNode.getX() - nodeBuffer.Item1.getX(), 2) + Math.Pow(targetNode.getY() - nodeBuffer.Item1.getY(), 2));
+            AStarNode newAStarNode = new AStarNode(nodeBuffer.Item1,hScore, Vector3.Magnitude(nodeBuffer.Item2), ptr);
+            
+            if (nodeBuffer.Item1.Status == 0) // When a node doesn't belong any list
             {
-                double hScore = Math.Sqrt(Math.Pow(targetNode.getX() - nodeBuffer.Item1.getX(), 2) + Math.Pow(targetNode.getY() - nodeBuffer.Item1.getY(), 2));
-                openList.Add(new AStarNode(nodeBuffer.Item1,hScore, Vector3.Magnitude(nodeBuffer.Item2), ptr ));
-                nodeBuffer.Item1.IsCheck = true;
+                openList.Add(newAStarNode);
+                nodeBuffer.Item1.Status = 1;
+                nodeBuffer.Item1.AStarNode = newAStarNode;
+                nodeBuffer.Item1.FScore = newAStarNode.FScore;
             } 
+            else if (nodeBuffer.Item1.Status == 1) // When a node belong to open list
+            {
+                if (newAStarNode.FScore < nodeBuffer.Item1.FScore)
+                {
+                    Debug.Log("Switching !! : new FScore = " + newAStarNode.FScore + " / old FScore = " + nodeBuffer.Item1.FScore);
+                    nodeBuffer.Item1.AStarNode = newAStarNode;
+                }
+            }
         }
     }
 
@@ -89,6 +99,8 @@ public class AStarAlgorithmV2
             {
                 if (minNode.FScore > openList[i].FScore) minNode = openList[i];
             }
+
+            minNode.GetNode.Status = 2;
             closeList.Add(minNode);
             openList.Remove(minNode);
             return minNode;
