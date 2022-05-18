@@ -9,7 +9,9 @@ public class PathNode //
     private int x;
     private int y;
     private Vector3 pos;
-    private bool isCheck = false;
+    private int status = 0; // 0 = NOT, 1 = OPEN LIST, 2 = CLOSE LIST
+    private double fScore = -1.0;
+    private AStarNode aStarNode;
 
     private List<Tuple<PathNode, Vector3>> cnnList = new List<Tuple<PathNode, Vector3>>();
 
@@ -39,9 +41,21 @@ public class PathNode //
     {
         cnnList.Add(Tuple.Create(node,v));
     }
-    public bool IsCheck
+    public int Status
     {
-        get => isCheck;
-        set => isCheck = value;
+        get => status;
+        set => status = value;
+    }
+
+    public double FScore
+    {
+        get => fScore;
+        set => fScore = value;
+    }
+
+    public AStarNode AStarNode
+    {
+        get => aStarNode;
+        set => aStarNode = value;
     }
 }

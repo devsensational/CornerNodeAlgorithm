@@ -158,7 +158,7 @@ public class CornerNodeAlgorithmV2
         }
         createConnect();
         stopwatch.Stop();
-        Debug.Log("Node Create Done!! Time : " + stopwatch.Elapsed.ToString());
+        Debug.Log("Node Create Done!! Time : " + stopwatch.ElapsedMilliseconds.ToString());
     }
     
 }
