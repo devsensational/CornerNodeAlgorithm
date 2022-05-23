@@ -29,7 +29,9 @@ public class AStarAlgorithmV2
         
         checkWall = new CheckWall(mapData);
         
+        pNodeList.Add(startNode);
         cnnNode(startNode);
+        pNodeList.Add(targetNode);
         cnnNode(targetNode);
         
         openList.Add(new AStarNode(startNode,0,0,null));
@@ -44,7 +46,11 @@ public class AStarAlgorithmV2
     {
         do
         {
-            if (ptr.GetNode.getX() == targetNode.getX() && ptr.GetNode.getY() == targetNode.getY())
+            ptr = addCloseList();
+            //Debug.Log(ptr.GetNode.getX() + " / " + ptr.GetNode.getY());
+            addOpenList(ptr);
+            
+            if (ptr.GetNode == targetNode && ptr.GetNode == targetNode)
             {
                 //done
                 Debug.Log("Pathfinding Complete (A* + CNA)");
@@ -59,8 +65,6 @@ public class AStarAlgorithmV2
                 }
             }
 
-            ptr = addCloseList();
-            addOpenList(ptr);
         } while (openList.Count != 0);
         Debug.Log("Can't find path");
     }
@@ -70,24 +74,31 @@ public class AStarAlgorithmV2
         {
             Tuple<PathNode,Vector3> nodeBuffer = ptr.GetNode.getCnn()[i];
             double hScore = Math.Sqrt(Math.Pow(targetNode.getX() - nodeBuffer.Item1.getX(), 2) + Math.Pow(targetNode.getY() - nodeBuffer.Item1.getY(), 2));
-            AStarNode newAStarNode = new AStarNode(nodeBuffer.Item1,hScore, Vector3.Magnitude(nodeBuffer.Item2), ptr);
+            double gScore = Math.Sqrt(Math.Pow(ptr.GetNode.getX() - nodeBuffer.Item1.getX(), 2) + Math.Pow(ptr.GetNode.getY() - nodeBuffer.Item1.getY(), 2)) + ptr.GScore;
+            double fScore = hScore + gScore;
+            //Debug.Log(hScore + "+" +gScore);
             
             if (nodeBuffer.Item1.Status == 0) // When a node doesn't belong any list
             {
+                AStarNode newAStarNode = new AStarNode(nodeBuffer.Item1,hScore, gScore , ptr);
                 openList.Add(newAStarNode);
                 nodeBuffer.Item1.Status = 1;
                 nodeBuffer.Item1.AStarNode = newAStarNode;
                 nodeBuffer.Item1.FScore = newAStarNode.FScore;
             } 
+            
             else if (nodeBuffer.Item1.Status == 1) // When a node belong to open list
             {
-                if (newAStarNode.FScore < nodeBuffer.Item1.FScore)
+                if (fScore < nodeBuffer.Item1.FScore)
                 {
-                    Debug.Log("Switching !! : new FScore = " + newAStarNode.FScore + " / old FScore = " + nodeBuffer.Item1.FScore);
-                    nodeBuffer.Item1.AStarNode = newAStarNode;
+                    nodeBuffer.Item1.AStarNode.GScore = gScore;
+                    nodeBuffer.Item1.AStarNode.HScore = hScore;
+                    nodeBuffer.Item1.AStarNode.FScore = fScore;
+                    nodeBuffer.Item1.AStarNode.ParentNode = ptr;
                 }
             }
         }
+        //Debug.Log("--------------------------");
     }
 
     private AStarNode addCloseList()
@@ -111,16 +122,17 @@ public class AStarAlgorithmV2
     
     private void cnnNode(PathNode ptr)
     {
-        pNodeList.Add(ptr);
         for (int i = 0; i < pNodeList.Count - 1; i++)
         {
             checkWall.chkWall(ptr, pNodeList[i]);
             
         }
+        /*
         for (int i = 0; i < ptr.getCnn().Count; i++)
         {
             ptr.getCnn()[i].Item1.setCnn(ptr, ptr.getCnn()[i].Item2);
         }
+        */
     }
     
 }

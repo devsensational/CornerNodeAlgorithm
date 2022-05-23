@@ -1,0 +1,33 @@
+노드생성
+
+mapData[][] = 2차원 배열에 저장된 데이터
+wallList[] = 저장된 맵 데이터 중 '벽'에 해당하는 데이터
+PathNodeList = 생성된 노드들이 저장되는 리스트
+
+direction = {북, 북동, 동, 남동, 남, 남서, 서, 북서}
+diagonalDirection = {북동, 남동, 남서, 북서}
+
+for wallList.begin to wallList.end do
+    if wallList의 요소 중 하나가 코너 검출을 시행하지 않았다면 then
+        '코너 생성 여부 체크' 실행
+    endif
+endfor
+
+function 코너 생성 여부 체크 {
+    for i = 0 to 4 do 
+        if 포인터(x,y)를 기점으로 diagonalDirection[i]에 해당하는 방향 == '열린 공간' then
+            '코너 검출' 실행
+    endfor
+}
+
+function 코너 검출 {
+    wallCount = 0
+    for i = 0 to 8 do
+        if 포인터(x,y)를 기점으로 direction[i]에 해당하는 방향 == '벽' then
+            wallCount += 1
+        endif
+        if wallCount == 1 then
+            포인터(x,y)에 노드를 생성한다.
+            PathNodeList에 추가한다.
+    endfor
+}

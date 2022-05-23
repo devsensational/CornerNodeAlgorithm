@@ -68,7 +68,7 @@ public class CornerNodeAlgorithmV2
                 createCorner(nextX, nextY, nextDirection);
             }
         }
-    }
+    } // Use Recursive call
 
     private void createCornerV2(int x, int y)
     {
@@ -88,7 +88,7 @@ public class CornerNodeAlgorithmV2
         mapData[x, y].Type = Constants.CHECK;
     }
 
-    private void checkCorner(int x, int y)
+    private void checkCorner(int x, int y) // Check corner
     {
         int wallCount = 0;
         for (int i = 0; i < 8; i++)
@@ -107,17 +107,16 @@ public class CornerNodeAlgorithmV2
             mapData[x, y].Type = Constants.NODE;
             pNodeList.Add(new PathNode(x, y));
         }
-
     }
 
-    private int directionSelector(int directionNumber)
+    private int directionSelector(int directionNumber) // Direction selector
     {
         if (directionNumber > 7) return directionNumber % 8;
         if (directionNumber < 0) return 8 + directionNumber;
         return directionNumber;
     }
 
-    private void createConnect()
+    private void createConnect() // Create connection between PathNode
     {
         CheckWall ckWall = new CheckWall(mapData);
         for (int i = 0; i < pNodeList.Count; i++)
@@ -141,7 +140,7 @@ public class CornerNodeAlgorithmV2
     public List<PathNode> getPNodeList()
     {
         return pNodeList;
-    }
+    } // Get PathNode list
 
     public void start(List<(int, int)> wallList) //Start
     {

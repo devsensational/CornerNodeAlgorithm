@@ -38,7 +38,7 @@ public class CheckWall
                 return;
             }
             if (map[ptrX, ptrY].Type == NODE) nodeCnt++;
-            if (nodeCnt > 2) return;
+            //if (nodeCnt > 2) return;
         }
         startNode.setCnn(targetNode, checkDir);
         targetNode.setCnn(startNode, checkDir);
