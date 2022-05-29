@@ -81,7 +81,7 @@ public class AStarAlgorithmForComparison
                 if (mapData[ptrX, ptrY].Type == Constants.OPEN || mapData[ptrX, ptrY].Type == Constants.NODE )
                 {
                     double hScore = Math.Sqrt(Math.Pow(targetX - ptrX, 2) + Math.Pow(targetY - ptrY, 2));
-                    openList.Add(new AStarNodeForComparison(ptrX,ptrY,hScore, 1, ptr));
+                    openList.Add(new AStarNodeForComparison(ptrX,ptrY,hScore, ptr.GScore + 1, ptr));
                     mapData[ptrX, ptrY].Type = Constants.ASTARCHECK;
                 }
             }
@@ -96,7 +96,7 @@ public class AStarAlgorithmForComparison
                 if (mapData[ptrX, ptrY].Type == Constants.OPEN || mapData[ptrX, ptrY].Type == Constants.NODE )
                 {
                     double hScore = Math.Sqrt(Math.Pow(targetX - ptrX, 2) + Math.Pow(targetY - ptrY, 2));
-                    openList.Add(new AStarNodeForComparison(ptrX,ptrY,hScore, 1.33, ptr));
+                    openList.Add(new AStarNodeForComparison(ptrX,ptrY,hScore, ptr.GScore + 1.33, ptr));
                     mapData[ptrX, ptrY].Type = Constants.ASTARCHECK;
                 }
             }

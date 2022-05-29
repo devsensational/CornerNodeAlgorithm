@@ -36,9 +36,11 @@ public class TileRenderer : MonoBehaviour
     public float tileHei;
     public string jsonFileName;
 
+    public bool onOldPathLayDebug;
     public bool onPathLayDebug;
     public bool onPathLayForComparison;
     public bool onNodeNetworkDebug;
+    public bool onStartNodeConnectoin;
 
     private System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
     void Start() // Unity Start
@@ -50,20 +52,30 @@ public class TileRenderer : MonoBehaviour
         renderConnectV2();
         aStarConfig();
         
-        aStarAlgorithmV2Start();
         //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+        aStarAlgorithmV2Start();
         comparisonStart();
+        
         //renderMap(); //Render map tiles
     }
     
     private void Update() // Unity Update
     {
         if(onNodeNetworkDebug) layDebug();
-        //if(onPathLayDebug) pathLayDebug(); //Old Debug
+        //if(onOldPathLayDebug) pathLayDebug(); //Old Debug
         if(onPathLayDebug) pathLayDebugForComparison(pathListV2, Color.green);
-        if(onPathLayForComparison) pathLayDebugForComparison(pathListForComparison, Color.yellow);
+        if(onPathLayForComparison) pathLayDebugForComparison(pathListForComparison, Color.magenta);
+        if(onStartNodeConnectoin) startNodeConnectionDebug();
     }
 
+    private void startNodeConnectionDebug()
+    {
+        for (int i = 0; i < startNode.getCnn().Count; i++)
+        {
+            Debug.Log("vector = " + startNode.getCnn()[i].Item2.magnitude);
+            Debug.DrawLine(startNode.getCnn()[i].Item2 * tileWid, startNode.getCnn()[i].Item2 * tileWid, Color.red);
+        }
+    }
     private void aStarAlgorithmV2Start()
     {
         pathListV2 = aStarAlgorithmV2.start(startNode, targetNode, pNodeList, mapData);
@@ -101,7 +113,7 @@ public class TileRenderer : MonoBehaviour
         //tileHei = tileType[0].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
         for (int i = 0; i < pathList.Count - 1; i++)
         {
-            Debug.DrawLine(pathList[i].getPos() * tileWid, pathList[i + 1].getPos() * tileWid, Color.green);
+            Debug.DrawLine(pathList[i].getPos() * tileWid, pathList[i + 1].getPos() * tileWid, Color.magenta);
         }
     }
 

@@ -1,0 +1,24 @@
+startNode = 출발지의 위치정보를 담고 있는 객체
+targetNode = 도착지의 위치정보를 담고 있는 객체
+mapData = 2차원 상의 맵 데이터
+
+checkVector = Vector3(targetNode.position) - Vector3(startNode.position)
+unit = checkVector의 단위벡터
+
+for i = 1 to unit * i <= checkVector의 길이일때 까지 do
+    pointer = startNode + (unit * i)
+    nodeCount = 검출 시 만난 벽의 갯수
+    if mapData[ptr] == 벽 then
+        return
+    endif
+    
+    if mapData[ptr] == Node then
+        nodeCount += 1
+    endif
+    
+    if nodeCount > 2
+        return
+    endif
+endfor
+
+startNode와 targetNode를 서로 연결한다.

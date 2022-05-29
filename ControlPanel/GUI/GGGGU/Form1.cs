@@ -8,170 +8,81 @@ using System.IO;
 using test150x;
 using OpenCvSharp;
 using System.Drawing;
+using System.Net;
+using System.Net.Http;
+using Image = System.Drawing.Image;
 
 namespace GGGGU
 {
 	public partial class Form1 : Form
 	{
-
-        Bitmap bitmap;
-        
-
-        public Form1()
+		Bitmap bitmap;
+		public Form1()
 		{
 			InitializeComponent();
+			ResetListBox();
 		}
+        
+        private void ResetListBox()
+        {
+	        var ml = ServerAPI.ShowMapList();
+	        listBox.Items.Clear();
+	        foreach (var index in ml)
+	        {
+		        listBox.Items.Add(index.Original);
+	        }
+        }
 
-		
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+	        string someUrl = ServerAPI.hostIP + "/file/view/" + ServerAPI.getOneImg(listBox.SelectedIndex);
+	        Image img = Image.FromStream(WebRequest.Create(someUrl).GetResponse().GetResponseStream());
+	        Bitmap b = new Bitmap(WebRequest.Create(someUrl).GetResponse().GetResponseStream() );
+	        pictureBox.Image = img;
+	        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+	        // WebClient cl = new WebClient();
+	        // Stream stream = cl.OpenRead(ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex));
+	        // MessageBox.Show(stream.ToString());
+	        // bitmap = Bitmap.FromStream(stream) as Bitmap;
 
-        private void button2_Click(object sender, EventArgs e)
-		{
+	        // stream.Close();
+	        // cl.Dispose();
 
-		}
 
-		private void button3_Click(object sender, EventArgs e)
+
+
+
+	        // WebClient Downloader = new WebClient();
+	        // Stream ImageStream = Downloader.OpenRead(ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex));
+	        // Bitmap DownloadImage = Bitmap.FromStream(ImageStream) as Bitmap;
+	        //bitmap = new Bitmap(ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex));
+	        // 이미지 출력
+	        //pictureBox.ImageLocation = ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex);
+        }
+
+		private void Exit_Click(object sender, EventArgs e) //나가기 버튼
 		{
 			Environment.Exit(0);
 		}
 
-		private void pictureBox1_Click(object sender, EventArgs e)
+		private void SetShared_Click(object sender, EventArgs e) //공유 설정 버튼
 		{
-
+			ServerAPI.SetDownloadFile(ServerAPI.getOneMap(listBox.SelectedIndex));
 		}
 
-
-		private void button2_Click_1(object sender, EventArgs e) 
+		private void CreateData_Click(object sender, EventArgs e) //맵 데이터 생성 버튼
 		{
-            // 이미지 로드
-            OpenFileDialog openFile = new OpenFileDialog();
-            openFile.DefaultExt = "png";
-            openFile.Filter = "Graphics interchange Format (*.png)|*.png|All files(*.*)|*.*";
-            openFile.ShowDialog();
+			OpenFileDialog openFile = new OpenFileDialog();
+			openFile.DefaultExt = "png";
+			openFile.Filter = "Graphics interchange Format (*.png)|*.png|All files(*.*)|*.*";
 
-            
-            if (openFile.FileName.Length > 0)
-            {
-                bitmap = new Bitmap(openFile.FileName);
-
-                // 이미지 출력
-                pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                pictureBox1.Image = bitmap;
-
-
-            }
-
-
-
-
-        }
-
-		private void button1_Click_1(object sender, EventArgs e) // 맵 데이터 생성 및 이진화
-		{
-
-			System.Drawing.Color col;
-            int Average;
-
-            for (int i = 0; i < bitmap.Size.Width; i++)
-            {
-                for (int j = 0; j < bitmap.Size.Height; j++)
-                {
-                    col = bitmap.GetPixel(i, j);
-                    Average = (col.R + col.G + col.B) / 3;
-
-                    //이진화 흑, 백 위치를 변경하려면 아래 if문 주석위치 변경.
-                    //이진화에 한계값은 70으로지정
-                    if (Average <= 70)
-                    {
-                        //image2.SetPixel(i, j, Color.White);
-                        bitmap.SetPixel(i, j, System.Drawing.Color.Black);
-                    }
-                    else
-                    {
-                        //image2.SetPixel(i, j, Color.Black);
-                        bitmap.SetPixel(i, j, System.Drawing.Color.White);
-                    }
-                }
-            }
-            //pictureBox1.Image = bitmap;
-
-
-            byte[] result = null;
-            if(bitmap != null)
+			DialogResult dr = openFile.ShowDialog();
+			if (dr == DialogResult.OK)
 			{
-                MemoryStream stream = new MemoryStream();
-                bitmap.Save(stream, bitmap.RawFormat);
-                result = stream.ToArray();
+				Form frm = new Form2(openFile.FileName);
+				frm.ShowDialog();
+				ResetListBox();
 			}
-
-
-            var image = SixLabors.ImageSharp.Image.Load<Rgba32>(result);
-            var width = image.Width;
-            var height = image.Height;
-            Console.WriteLine($"Width/Height: {width}/{height}");
-
-
-
-            var pixelArray = new byte[width, height];
-            var mapDataObject = new MapDataObject();
-
-
-            //var count = 0;
-            //var count2 = 0;
-
-            mapDataObject.height = height; //Json Map Data 높이
-            mapDataObject.width = width; //Json Map Data 길이
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    var pixel = image[x, y];
-                    var r = (int)pixel.Rgb.R;
-                    var g = (int)pixel.Rgb.G;
-                    var b = (int)pixel.Rgb.B;
-
-
-                    if (r < 128 && g < 128 && b < 128) //검은색
-                    {
-
-
-
-                        mapDataObject.mapDataArr.Add(1); //Add black to list
-                        /*for(int i = 0; i < mapDataObject.mapDataArr.Count; i++)
-						{
-                            if(mapDataObject.mapDataArr.)
-                            mapDataObject.mapCountArr.Add(mapDataObject.mapDataArr.Count);
-						}*/
-
-
-                        //pixelArray[x, y] = 1;
-                    }
-                    else //흰색
-                    {
-                        mapDataObject.mapDataArr.Add(0); //Add white to list
-                        /*for (int i = 0; i < mapDataObject.mapDataArr.Count; i++)
-                        {
-                            mapDataObject.mapCountArr.Add(mapDataObject.mapDataArr.Count);
-                        }
-                        */
-
-                        //pixelArray[x, y] = 0;
-                    }
-                }
-            }
-
-            var jsonString = JsonConvert.SerializeObject(mapDataObject);
-            File.WriteAllText("C:/Users/kwona/source/repos/test150x/mapData.json", jsonString);
-
-            Console.WriteLine($"Done in {stopwatch.ElapsedMilliseconds}ms");
-            Console.WriteLine($"Press any key to continue...");
-            //Console.ReadKey(true);
-        }
-
-		private void pictureBox1_Click_1(object sender, EventArgs e)
-		{
-
 		}
 	}
 }

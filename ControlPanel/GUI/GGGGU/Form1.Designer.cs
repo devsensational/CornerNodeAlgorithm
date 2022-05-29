@@ -23,19 +23,19 @@
 		#region Windows Form 디자이너에서 생성한 코드
 
 		/// <summary>
-		/// 디자이너 지원에 필요한 메서드입니다. 
-		/// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent()
 		{
 			this.Setting = new System.Windows.Forms.Button();
 			this.Exit = new System.Windows.Forms.Button();
-			this.listBox1 = new System.Windows.Forms.ListBox();
-			this.button2 = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
+			this.listBox = new System.Windows.Forms.ListBox();
+			this.Upload = new System.Windows.Forms.Button();
+			this.CreateMap = new System.Windows.Forms.Button();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.pictureBox1 = new System.Windows.Forms.PictureBox();
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			this.pictureBox = new System.Windows.Forms.PictureBox();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// Setting
@@ -46,7 +46,6 @@
 			this.Setting.TabIndex = 1;
 			this.Setting.Text = "설정";
 			this.Setting.UseVisualStyleBackColor = true;
-			this.Setting.Click += new System.EventHandler(this.button2_Click);
 			// 
 			// Exit
 			// 
@@ -56,72 +55,71 @@
 			this.Exit.TabIndex = 2;
 			this.Exit.Text = "나가기";
 			this.Exit.UseVisualStyleBackColor = true;
-			this.Exit.Click += new System.EventHandler(this.button3_Click);
+			this.Exit.Click += new System.EventHandler(this.Exit_Click);
 			// 
-			// listBox1
+			// listBox
 			// 
-			this.listBox1.FormattingEnabled = true;
-			this.listBox1.ItemHeight = 12;
-			this.listBox1.Location = new System.Drawing.Point(618, 30);
-			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(158, 208);
-			this.listBox1.TabIndex = 4;
+			this.listBox.FormattingEnabled = true;
+			this.listBox.ItemHeight = 12;
+			this.listBox.Location = new System.Drawing.Point(618, 30);
+			this.listBox.Name = "listBox";
+			this.listBox.Size = new System.Drawing.Size(158, 208);
+			this.listBox.TabIndex = 4;
+			this.listBox.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
 			// 
-			// button2
+			// Upload
 			// 
-			this.button2.Location = new System.Drawing.Point(618, 260);
-			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(159, 34);
-			this.button2.TabIndex = 6;
-			this.button2.Text = "사진 업로드";
-			this.button2.UseVisualStyleBackColor = true;
-			this.button2.Click += new System.EventHandler(this.button2_Click_1);
+			this.Upload.Location = new System.Drawing.Point(618, 260);
+			this.Upload.Name = "Upload";
+			this.Upload.Size = new System.Drawing.Size(159, 34);
+			this.Upload.TabIndex = 6;
+			this.Upload.Text = "맵 데이터 생성";
+			this.Upload.UseVisualStyleBackColor = true;
+			this.Upload.Click += new System.EventHandler(this.CreateData_Click);
 			// 
-			// button1
+			// CreateMap
 			// 
-			this.button1.Location = new System.Drawing.Point(618, 300);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(159, 34);
-			this.button1.TabIndex = 7;
-			this.button1.Text = "맵 데이터 생성";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click_1);
+			this.CreateMap.Location = new System.Drawing.Point(618, 300);
+			this.CreateMap.Name = "CreateMap";
+			this.CreateMap.Size = new System.Drawing.Size(159, 34);
+			this.CreateMap.TabIndex = 7;
+			this.CreateMap.Text = "공유 파일 설정";
+			this.CreateMap.UseVisualStyleBackColor = true;
+			this.CreateMap.Click += new System.EventHandler(this.SetShared_Click);
 			// 
-			// pictureBox1
+			// pictureBox
 			// 
-			this.pictureBox1.Location = new System.Drawing.Point(43, 30);
-			this.pictureBox1.Name = "pictureBox1";
-			this.pictureBox1.Size = new System.Drawing.Size(546, 383);
-			this.pictureBox1.TabIndex = 8;
-			this.pictureBox1.TabStop = false;
-			this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click_1);
+			this.pictureBox.Location = new System.Drawing.Point(43, 30);
+			this.pictureBox.Name = "pictureBox";
+			this.pictureBox.Size = new System.Drawing.Size(546, 383);
+			this.pictureBox.TabIndex = 8;
+			this.pictureBox.TabStop = false;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(800, 450);
-			this.Controls.Add(this.pictureBox1);
-			this.Controls.Add(this.button1);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.listBox1);
+			this.Controls.Add(this.pictureBox);
+			this.Controls.Add(this.CreateMap);
+			this.Controls.Add(this.Upload);
+			this.Controls.Add(this.listBox);
 			this.Controls.Add(this.Exit);
 			this.Controls.Add(this.Setting);
 			this.Name = "Form1";
 			this.Text = "Form1";
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
 			this.ResumeLayout(false);
-
 		}
 
 		#endregion
 		private System.Windows.Forms.Button Setting;
 		private System.Windows.Forms.Button Exit;
-		private System.Windows.Forms.ListBox listBox1;
-		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.ListBox listBox;
+		private System.Windows.Forms.Button Upload;
+		private System.Windows.Forms.Button CreateMap;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
-		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.PictureBox pictureBox;
 	}
 }
 
