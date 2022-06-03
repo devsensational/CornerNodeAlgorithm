@@ -16,7 +16,6 @@ namespace GGGGU
 {
 	public partial class Form1 : Form
 	{
-		Bitmap bitmap;
 		public Form1()
 		{
 			InitializeComponent();
@@ -26,11 +25,11 @@ namespace GGGGU
         private void ResetListBox()
         {
 	        var ml = ServerAPI.ShowMapList();
-	        listBox.Items.Clear();
-	        foreach (var index in ml)
-	        {
-		        listBox.Items.Add(index.Original);
-	        }
+	        // listBox.Items.Clear();
+	        // foreach (var index in ml)
+	        // {
+		       //  listBox.Items.Add(index.Original);
+	        // }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)

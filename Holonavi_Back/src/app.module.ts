@@ -7,14 +7,19 @@ import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(), AppModule, FileModule,
+    TypeOrmModule.forRoot(),
+    AppModule,
+    FileModule,
     MulterModule.register({
       dest: './maps',
-    })],
+    }),
+  ],
   controllers: [],
-  providers: [{
-    provide: APP_FILTER,
-    useClass: CatchException,
-  }],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: CatchException,
+    },
+  ],
 })
 export class AppModule {}

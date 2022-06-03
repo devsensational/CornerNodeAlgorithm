@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import express from 'express';
-import * as path from 'path'
+import * as path from 'path';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, './common', 'uploads'), {
     prefix: '/maps',
   });
-  const port = 3000;
+  const port = process.env.PORT || 3000;
   await app.listen(port);
 }
 bootstrap();

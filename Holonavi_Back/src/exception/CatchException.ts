@@ -1,5 +1,10 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from "@nestjs/common";
-import { HttpArgumentsHost } from "@nestjs/common/interfaces";
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+} from '@nestjs/common';
+import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 
 @Catch()
 export default class CatchException implements ExceptionFilter {
@@ -17,9 +22,7 @@ export default class CatchException implements ExceptionFilter {
         status: exception.getStatus(), // throw new HttpError()로 던진 첫번째 매개변수 status 값
         message: exception.message, // throw new HttpError()로 던진 두번째 매개변수 message 값
       };
-    } 
-    
-    else {
+    } else {
       // XXXX() is not a function와 같은 서버 자체에서의 오류일때, 서버 오류로 처리합니다.
       httpError = {
         status: 500,
