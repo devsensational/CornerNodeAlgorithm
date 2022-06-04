@@ -25,39 +25,20 @@ namespace GGGGU
         private void ResetListBox()
         {
 	        var ml = ServerAPI.ShowMapList();
-	        // listBox.Items.Clear();
-	        // foreach (var index in ml)
-	        // {
-		       //  listBox.Items.Add(index.Original);
-	        // }
+	        listBox.Items.Clear();
+	        foreach (var index in ml)
+	        {
+		        listBox.Items.Add(index.Original);
+	        }
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-	        string someUrl = ServerAPI.hostIP + "/file/view/" + ServerAPI.getOneImg(listBox.SelectedIndex);
+	        string someUrl = ServerInfo.hostIP + "/file/view/" + ServerAPI.getOneImg(listBox.SelectedIndex);
 	        Image img = Image.FromStream(WebRequest.Create(someUrl).GetResponse().GetResponseStream());
-	        Bitmap b = new Bitmap(WebRequest.Create(someUrl).GetResponse().GetResponseStream() );
 	        pictureBox.Image = img;
 	        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-	        // WebClient cl = new WebClient();
-	        // Stream stream = cl.OpenRead(ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex));
-	        // MessageBox.Show(stream.ToString());
-	        // bitmap = Bitmap.FromStream(stream) as Bitmap;
-
-	        // stream.Close();
-	        // cl.Dispose();
-
-
-
-
-
-	        // WebClient Downloader = new WebClient();
-	        // Stream ImageStream = Downloader.OpenRead(ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex));
-	        // Bitmap DownloadImage = Bitmap.FromStream(ImageStream) as Bitmap;
-	        //bitmap = new Bitmap(ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex));
-	        // 이미지 출력
-	        //pictureBox.ImageLocation = ServerAPI.hostIP + "/file/img/" + ServerAPI.getOneMap(listBox.SelectedIndex);
-        }
+		}
 
 		private void Exit_Click(object sender, EventArgs e) //나가기 버튼
 		{
