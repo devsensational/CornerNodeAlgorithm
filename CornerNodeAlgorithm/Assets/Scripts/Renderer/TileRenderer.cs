@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Headers;
 using UnityEngine;
-using UnityEngine.WSA;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 public class TileRenderer : MonoBehaviour
@@ -12,6 +9,9 @@ public class TileRenderer : MonoBehaviour
     public GameObject[] tileType;
     public GameObject startObj;
     public GameObject targetObj;
+    public GameObject nodeCube;
+    public GameObject mainCamera;
+    public Text text;
 
     MapData2D mapGene;
     CornerGenerator cGene;
@@ -47,16 +47,29 @@ public class TileRenderer : MonoBehaviour
     {
         //mapInit(); // Old map initialize
         //nodeGene(); // Old Node generator
+        HttpMapDownloadAPI.DownloadFile();
         jsonMapInitialize();
+
+        if (mapData != null) { text.text = "Done!"; }
+        else { text.text = "null";  }
         cornerNodeV2Start(); //Node Create start
         renderConnectV2();
         aStarConfig();
         
-        //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData);
+        //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData); // old
         aStarAlgorithmV2Start();
-        comparisonStart();
-        
+        //comparisonStart();
+
         //renderMap(); //Render map tiles
+        //mainCamera.transform.position = new Vector3(284.2f ,0 ,47.2f);
+
+        gameObject.GetComponent<LineRenderer>().SetVertexCount(pathListV2.Count);
+        for (int i = 0; i < pathListV2.Count; i++)
+        {
+            GameObject cube = Instantiate(nodeCube);
+            gameObject.GetComponent<LineRenderer>().SetPosition(i, pathListV2[i] * tileWid);
+            //cube.transform.position = pathListV2[i] * tileWid;
+        }
     }
     
     private void Update() // Unity Update
@@ -64,7 +77,7 @@ public class TileRenderer : MonoBehaviour
         if(onNodeNetworkDebug) layDebug();
         //if(onOldPathLayDebug) pathLayDebug(); //Old Debug
         if(onPathLayDebug) pathLayDebugForComparison(pathListV2, Color.green);
-        if(onPathLayForComparison) pathLayDebugForComparison(pathListForComparison, Color.magenta);
+        //if(onPathLayForComparison) pathLayDebugForComparison(pathListForComparison, Color.magenta);
         if(onStartNodeConnectoin) startNodeConnectionDebug();
     }
 
