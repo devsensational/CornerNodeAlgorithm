@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -56,7 +54,7 @@ public class AStarAlgorithmV2
                 Debug.Log("Pathfinding Complete (A* + CNA)");
                 while (true)
                 {
-                    pathResult.Add(new Vector3(ptr.GetNode.getX(), ptr.GetNode.getY()));
+                    pathResult.Add(new Vector3(ptr.GetNode.getX(), 0,ptr.GetNode.getY()));
                     if (ptr.GetNode.getX() == startNode.getX() && ptr.GetNode.getY() == startNode.getY())
                     {
                         return;

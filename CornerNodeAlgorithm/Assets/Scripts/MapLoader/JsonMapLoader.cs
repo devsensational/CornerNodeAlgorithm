@@ -1,7 +1,6 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -27,10 +26,38 @@ public class JsonMapLoader
             wallList = new List<(int, int)>();
             
             var mData = json.SelectToken("mapDataArr");
-            int cnt = 0;
+            // var mData = json.SelectToken("mapDataArr2");
+            // var mCount = json.SelectToken("mapCountArr");
+            // Debug.Log("mdata cnt : " + mData.Count());
+            // Debug.Log("mCount cnt : " + mCount.Count());
+            int cnt = 0, ptrX = 0, ptrY = 0, idx = 0;
+            
+            /*
+            for(int i = 0 ; i < mCount.Count(); i++)
+            {
+                
+                for (int j = 0; j < (int)mCount[i]; j++)
+                {
+                    if (ptrY >= width)
+                    {
+                        ptrX = 0;
+                        ptrY++;
+                    }
+                    
+                    int tokenValue = (int) mData[i];
+                    mapData[ptrX, ptrY] = new Cell(tokenValue);
+                    if(tokenValue == 1) wallList.Add((ptrX,ptrY));
+                    ptrX++;
+                    cnt++;
+                    //Debug.Log("cnt : " + cnt + " / x : " + ptrX + " / Y : " + ptrY + " / idx : " + idx);
+                }
+            }
+            */
+            
+           
             for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = height - 1; j >= 0; j--)
                 {
                     int tokenValue = (int) mData[cnt];
                     mapData[i, j] = new Cell(tokenValue);
@@ -38,6 +65,7 @@ public class JsonMapLoader
                     cnt++;
                 }
             }
+     
         }
     }
 
