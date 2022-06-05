@@ -50,8 +50,6 @@ public class TileRenderer : MonoBehaviour
         HttpMapDownloadAPI.DownloadFile();
         jsonMapInitialize();
 
-        if (mapData != null) { text.text = "Done!"; }
-        else { text.text = "null";  }
         cornerNodeV2Start(); //Node Create start
         renderConnectV2();
         aStarConfig();
@@ -61,15 +59,16 @@ public class TileRenderer : MonoBehaviour
         //comparisonStart();
 
         //renderMap(); //Render map tiles
-        //mainCamera.transform.position = new Vector3(284.2f ,0 ,47.2f);
-
+        mainCamera.transform.position = new Vector3(67.0f ,0 ,11.0f);
+        
         gameObject.GetComponent<LineRenderer>().SetVertexCount(pathListV2.Count);
         for (int i = 0; i < pathListV2.Count; i++)
         {
             GameObject cube = Instantiate(nodeCube);
-            gameObject.GetComponent<LineRenderer>().SetPosition(i, pathListV2[i] * tileWid);
+            gameObject.GetComponent<LineRenderer>().SetPosition(i, (pathListV2[i] * 0.05f) + new Vector3(0,-1.5f,0));
             //cube.transform.position = pathListV2[i] * tileWid;
         }
+        text.text = "Wow";
     }
     
     private void Update() // Unity Update

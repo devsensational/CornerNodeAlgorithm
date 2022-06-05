@@ -19,12 +19,16 @@ public class AStarAlgorithmV2
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-        
+
         this.startNode = startNode;
         this.targetNode = targetNode;
         this.pNodeList = pNodeList;
         this.mapData = mapData;
-        
+
+        openList.Clear();
+        closeList.Clear();
+        pathResult.Clear();
+
         checkWall = new CheckWall(mapData);
         
         pNodeList.Add(startNode);

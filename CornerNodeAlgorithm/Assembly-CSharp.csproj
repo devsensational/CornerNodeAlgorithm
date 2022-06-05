@@ -8,9 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
-    <ProjectGuid>{F2FFE2A8-96E0-BEBE-6B73-0E15A9632C4A}</ProjectGuid>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{A8E2FFF2-E096-BEBE-6B73-0E15A9632C4A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -48,7 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Package</UnityProjectGenerator>
-    <UnityProjectGeneratorVersion>2.0.14</UnityProjectGeneratorVersion>
+    <UnityProjectGeneratorVersion>2.0.15</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>WSAPlayer:21</UnityBuildTarget>
     <UnityVersion>2020.3.25f1</UnityVersion>
@@ -61,7 +60,9 @@
     <Compile Include="Assets\Scripts\VirtualMap\MapData2D.cs" />
     <Compile Include="Assets\Scripts\openCV\openCV.cs" />
     <Compile Include="Assets\Scripts\Logic\AstarForComparison\AStarAlgorithmForComparison.cs" />
+    <Compile Include="Assets\Scripts\HoloLens\MapButtonEvent.cs" />
     <Compile Include="Assets\Scripts\Logic\AStarNode.cs" />
+    <Compile Include="Assets\Scripts\HoloLens\NavigationManager.cs" />
     <Compile Include="Assets\Scripts\Renderer\TileRenderer.cs" />
     <Compile Include="Assets\Scripts\Logic\AStarAlgorithmV2.cs" />
     <Compile Include="Assets\Scripts\Logic\Cell.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Assets\Scripts\Logic\PathNode.cs" />
     <Compile Include="Assets\Scripts\Logic\CheckWall.cs" />
     <Compile Include="Assets\Scripts\Logic\AStarAlgorithm.cs" />
+    <Compile Include="Assets\Scripts\HoloLens\ImageRotator.cs" />
     <Compile Include="Assets\Scripts\Logic\AstarForComparison\AStarNodeForComparison.cs" />
     <Compile Include="Assets\Scripts\MapLoader\JsonMapLoader.cs" />
     <Compile Include="Assets\Scripts\HoloLens\UIManager.cs" />
