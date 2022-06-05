@@ -27,7 +27,7 @@ namespace GGGGU
     
     public class ServerAPI
     {
-        public static string hostIP = "15.164.95.77:3000";
+        private static string hostIP = ServerInfo.hostIP;
         public static string GlobalRes = "";
 
         public static string? getOneMap(int index)
@@ -56,7 +56,7 @@ namespace GGGGU
             {
                 if (i == index) 
                 {
-                    cc = mli.OriImg?.ToString();
+                    cc = mli.SaveImg?.ToString();
                     break;
                 }
                 i++;
@@ -101,7 +101,7 @@ namespace GGGGU
             FileStream fs = File.OpenRead(path);
             multiForm.Add(new StreamContent(fs), "file",  Path.GetFileName(path));
     
-            var url = "http://15.164.95.77:3000/file/upload";
+            var url = hostIP + "file/upload";
             var res = await client.PostAsync(url, multiForm);
             Thread.Sleep(100);
             GlobalRes =  res.Content.ReadAsStringAsync().Result.Split('/')[4].Split('"')[0];
@@ -115,15 +115,6 @@ namespace GGGGU
             multiForm.Add(new StreamContent(fs), "file", Path.GetFileName(path));
             var url = hostIP + "/file/imgupload/" + GlobalRes;
             await client.PostAsync(url, multiForm);
-        }
-    
-        public static async Task DownloadFile(string filename)
-        {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage res = await client.GetAsync("http://15.164.95.77:3000/file/downloads/" + filename);
-            byte[] resContent = await res.Content.ReadAsByteArrayAsync();
-            System.IO.File.WriteAllBytes(@"filename.json", resContent);
-            Console.WriteLine("파일 수신 완료");
         }
     }
 }
