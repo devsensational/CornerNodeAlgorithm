@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\Logic\AstarForComparison\AStarNodeForComparison.cs" />
     <Compile Include="Assets\Scripts\MapLoader\JsonMapLoader.cs" />
     <Compile Include="Assets\Scripts\HoloLens\UIManager.cs" />
+    <Compile Include="Assets\Scripts\HoloLens\TargetObjectControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
