@@ -34,11 +34,14 @@ namespace GGGGU
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-	        string someUrl = ServerInfo.hostIP + "/file/view/" + ServerAPI.getOneImg(listBox.SelectedIndex);
-	        Image img = Image.FromStream(WebRequest.Create(someUrl).GetResponse().GetResponseStream());
-	        pictureBox.Image = img;
-	        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-		}
+	        if (listBox.SelectedItem != null)
+	        {
+		        string someUrl = ServerInfo.hostIP + "/file/view/" + ServerAPI.getOneImg(listBox.SelectedIndex);
+		        Image img = Image.FromStream(WebRequest.Create(someUrl).GetResponse().GetResponseStream());
+		        pictureBox.Image = img;
+		        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+	        }
+        }
 
 		private void Exit_Click(object sender, EventArgs e) //나가기 버튼
 		{
