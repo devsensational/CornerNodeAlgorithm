@@ -1,23 +1,16 @@
 import {
-  Body,
   Controller,
   Get,
-  HttpStatus,
   Param,
   Post,
-  Patch,
-  Query,
   Res,
   UploadedFile,
-  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 import { Observable, of } from 'rxjs';
-import { UploadFileDto } from './dto/upload-file.dto';
 import { FileService } from './file.service';
-
 import { UploadOptions } from './option/file.options';
 
 var downname = '';
@@ -28,7 +21,6 @@ export class FileController {
   @Get('list')
   async fileList() {
     const Flist = await this.fileService.findall();
-
     return Flist;
   }
 
@@ -63,12 +55,6 @@ export class FileController {
     downname = filename;
     console.log('다운로드 파일을 ' + downname + '으로 설정하였습니다.');
     return downname;
-  }
-
-  @Get('one')
-  fileDownload(@Res() res) {
-    console.log('qqqqqqq' + downname);
-    return res.download('maps/' + downname);
   }
 
   @Get('downloads/:name')

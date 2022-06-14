@@ -1,10 +1,9 @@
-import { ForbiddenException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getConnection, Repository } from 'typeorm';
 import { UploadFileDto } from './dto/upload-file.dto';
 import { uploadFileURL } from './option/file.options';
 import { File } from './entities/file.entity';
-import { Console } from 'console';
 
 @Injectable()
 export class FileService {
