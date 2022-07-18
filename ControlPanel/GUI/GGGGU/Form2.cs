@@ -135,7 +135,7 @@ namespace GGGGU
             File.WriteAllText(savePath + "/mapData.json", jsonString);
             
             //파일 업로드
-            await ServerAPI.UploadFile(savePath + "\\mapData.json");
+            await ServerAPI.UploadFile(savePath + "/mapData.json");
             Thread.Sleep(100);
             MessageBox.Show("Form2: " + ServerAPI.GlobalRes);
             await ServerAPI.UploadImg(FilePath.Text);

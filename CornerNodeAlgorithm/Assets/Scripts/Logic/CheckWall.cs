@@ -21,11 +21,12 @@ public class CheckWall
         Vector3 targetV = new Vector3(targetNode.getX(), targetNode.getY());
         Vector3 checkDir = targetV - startV;
         Vector3 dirNorm = checkDir.normalized;
-        for (int i = 1; dirNorm.magnitude * i <= checkDir.magnitude; i++)
+        for (int i = 1; (dirNorm.magnitude * 1) * i <= checkDir.magnitude; i++)
         {
             int ptrX = startNode.getX() + (int) (dirNorm * i).x;
             int ptrY = startNode.getY() + (int) (dirNorm * i).y;
             int nodeCnt = 0;
+            
             if (map[ptrX, ptrY].Type == CLOSE || map[ptrX, ptrY].Type == WALL || map[ptrX, ptrY].Type == CHECK)
             {
                 return;

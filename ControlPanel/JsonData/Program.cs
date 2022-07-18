@@ -13,7 +13,7 @@ namespace test150x
     {
         public static void Main()
         {
-            var image = Image.Load<Rgba32>("C:/Users/kwona/Desktop/77777.png");
+            var image = Image.Load<Rgba32>("C:/6.png");
             var width = image.Width;
             var height = image.Height;
             Console.WriteLine($"Width/Height: {width}/{height}");
@@ -114,27 +114,9 @@ namespace test150x
                     
                 }
             }
-            var count = 0;
-            var lastData = mapDataObject.mapDataArr.First();
-            mapDataObjectRes.mapDataArr2.Add(lastData);
 
-            foreach (var data in mapDataObject.mapDataArr)
-            {
-                count++;
-                if (lastData != data)
-                {
-                    mapDataObjectRes.mapDataArr2.Add(data);
-                    mapDataObjectRes.mapCountArr.Add(count);
-
-                    
-
-                    count = 0;
-                    lastData = data;
-                }
-            }
-
-            var jsonString = JsonConvert.SerializeObject(mapDataObjectRes);
-            File.WriteAllText("C:/Users/kwona/source/repos/test150x/mapDataTest.json", jsonString);
+            var jsonString = JsonConvert.SerializeObject(mapDataObject);
+            File.WriteAllText("C:/2/156.json", jsonString);
 
             Console.WriteLine($"Done in {stopwatch.ElapsedMilliseconds}ms");
             Console.WriteLine($"Press any key to continue...");

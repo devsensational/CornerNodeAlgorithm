@@ -65,7 +65,7 @@ public class JsonMapLoader
                     cnt++;
                 }
             }
-     
+            Debug.Log("Number of walls = " + wallList.Count);
         }
     }
 

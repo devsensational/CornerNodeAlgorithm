@@ -9,9 +9,9 @@ public class TileRenderer : MonoBehaviour
     public GameObject[] tileType;
     public GameObject startObj;
     public GameObject targetObj;
-    public GameObject nodeCube;
-    public GameObject mainCamera;
-    public Text text;
+    //public GameObject nodeCube;
+    //public GameObject mainCamera;
+    //public Text text;
 
     MapData2D mapGene;
     CornerGenerator cGene;
@@ -41,34 +41,33 @@ public class TileRenderer : MonoBehaviour
     public bool onPathLayForComparison;
     public bool onNodeNetworkDebug;
     public bool onStartNodeConnectoin;
+    public bool onPathfinding;
 
     private System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
     void Start() // Unity Start
     {
         //mapInit(); // Old map initialize
         //nodeGene(); // Old Node generator
-        HttpMapDownloadAPI.DownloadFile();
+        //HttpMapDownloadAPI.DownloadFile();
+        
         jsonMapInitialize();
 
-        cornerNodeV2Start(); //Node Create start
-        renderConnectV2();
-        aStarConfig();
-        
-        //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData); // old
-        aStarAlgorithmV2Start();
-        //comparisonStart();
-
-        //renderMap(); //Render map tiles
-        mainCamera.transform.position = new Vector3(67.0f ,0 ,11.0f);
-        
-        gameObject.GetComponent<LineRenderer>().SetVertexCount(pathListV2.Count);
-        for (int i = 0; i < pathListV2.Count; i++)
+        if (onPathfinding)
         {
-            GameObject cube = Instantiate(nodeCube);
-            gameObject.GetComponent<LineRenderer>().SetPosition(i, (pathListV2[i] * 0.05f) + new Vector3(0,-1.5f,0));
-            //cube.transform.position = pathListV2[i] * tileWid;
+
+            cornerNodeV2Start(); //Node Create start
+            renderConnectV2();
+            aStarConfig();
+
+            //pathList = aStarAlgorithm.startPathfinding(startNode, targetNode, pNodeList, mapData); // old
+
+            aStarAlgorithmV2Start();
+            comparisonStart();
         }
-        text.text = "Wow";
+       
+
+        renderMap(); //Render map tiles
+        
     }
     
     private void Update() // Unity Update
@@ -76,7 +75,7 @@ public class TileRenderer : MonoBehaviour
         if(onNodeNetworkDebug) layDebug();
         //if(onOldPathLayDebug) pathLayDebug(); //Old Debug
         if(onPathLayDebug) pathLayDebugForComparison(pathListV2, Color.green);
-        //if(onPathLayForComparison) pathLayDebugForComparison(pathListForComparison, Color.magenta);
+        if(onPathLayForComparison) pathLayDebugForComparison2(pathListForComparison, Color.magenta);
         if(onStartNodeConnectoin) startNodeConnectionDebug();
     }
 
@@ -133,6 +132,13 @@ public class TileRenderer : MonoBehaviour
     {
         for (int i = 0; i < pathList.Count - 1; i++)
         {
+            Debug.DrawLine(new Vector3(pathList[i].x, pathList[i].z) * tileWid, new Vector3(pathList[i + 1].x, pathList[i + 1].z) * tileWid, color);
+        }
+    }
+    void pathLayDebugForComparison2(List<Vector3> pathList, Color color) //Show Path for comparison
+    {
+        for (int i = 0; i < pathList.Count - 1; i++)
+        {
             Debug.DrawLine(pathList[i] * tileWid, pathList[i + 1] * tileWid, color);
         }
     }
@@ -150,10 +156,10 @@ public class TileRenderer : MonoBehaviour
 
     void geneTile(int type, int ptrX, int ptrY)
     {
-        
+
         //tileWid = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.x;
         //tileHei = tileType[type].GetComponent<SpriteRenderer>().sprite.bounds.size.y;
-        
+        if (type == 0 || type == 5) return;
         GameObject tile = Instantiate(tileType[type]);
         tile.name = "X : " + ptrX + " / Y : " + ptrY;
 
